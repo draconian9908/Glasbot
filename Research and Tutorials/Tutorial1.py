@@ -1,6 +1,7 @@
 import pygame, sys, time
 import Textures
 import glob
+from mapengine import *
 
 pygame.init()
 
@@ -12,14 +13,9 @@ Sky = pygame.Surface(sky.get_size(), pygame.HWSURFACE)
 Sky.blit(sky, (0,0))
 del sky
 
-map_data = []
+terrain = Map_engine.load_map("maps/world.map")
 
-for x in range(10):
-    for y in range(6):
-        map_data.append((x,y, "1"))
-for x in range(10, 15):
-    for y in range(6, 10):
-        map_data.append((x,y,"2"))
+
 
 def show_fps():
 #Shows fps on the screen
@@ -102,15 +98,7 @@ while isRunning:
 
     window.blit(Sky, (0,0))
 
-    # - Render simple Terrain Grid
-    for x in range(0,640,Textures.Tiles.size):
-        for y in range(0, 480, Textures.Tiles.size):
-            # pygame.draw.rect(window, (255, 255, 255), (x,y,tile_size+1,tile_size+1),1)
-            # window.blit(Textures.Tiles.grass, (x + glob.Globals.camera_x,y + glob.Globals.camera_y))
-            for i in map_data:
-                tile = (i[0] * Textures.Tiles.size, i[1]*Textures.Tiles.size)
-                if(x,y) == tile:
-                    window.blit(Textures.Tiles.texture_tags[i[2]], (x+glob.Globals.camera_x, y+glob.Globals.camera_y))
+    window.blit(terrain,(glob.Globals.camera_x, glob.Globals.camera_y))
 
 
     show_fps()
