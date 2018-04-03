@@ -15,8 +15,6 @@ del sky
 
 terrain = Map_engine.load_map("maps/world.map")
 
-
-
 def show_fps():
 #Shows fps on the screen
     fps_overlay = fps_font.render(str(FPS), True, (255,0,0))
