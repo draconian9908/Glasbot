@@ -48,13 +48,13 @@ camera_x = 0
 camera_y = 0
 camera_move = 0
 
-brush = '1'
+brush = '2'
 
 # Intiailize default map
 
 for x in range(0, map_width, Tiles.size):
     for y in range(0, map_height, Tiles.size):
-        tile_data.append([x,y, "1"])
+        tile_data.append([x,y, "2"])
 
 isRunning = True
 
@@ -83,6 +83,8 @@ while isRunning:
                 brush = '2'
             elif event.key == pygame.K_3:
                 brush = '3'
+            elif event.key == pygame.K_4:
+                brush = '4'
 
             #save map
             elif event.key == pygame.K_RETURN:
