@@ -2,6 +2,8 @@ import pygame, sys, time
 import Textures
 import glob
 from mapengine import *
+from player import *
+from NPC import *
 
 pygame.init()
 
@@ -14,6 +16,8 @@ Sky.blit(sky, (0,0))
 del sky
 
 terrain = Map_engine.load_map("maps/world.map")
+
+
 
 def show_fps():
 #Shows fps on the screen
@@ -56,6 +60,12 @@ def count_fps():
 #Calls the function to make the window
 create_window()
 
+player = Player("player")
+player_w, player_h = player.width, player.height
+player_x = round(window_width/2 - player_w/2 - glob.Globals.camera_x) / Tiles.size
+player_y = round(window_height/2 - player_h/2 - glob.Globals.camera_y) / Tiles.size
+
+
 isRunning = True
 #Variable that is consistent when the game is running
 
@@ -90,6 +100,9 @@ while isRunning:
     elif glob.Globals.camera_move == 4:
         glob.Globals.camera_x -= deltatime * 100
 
+    player_x = (window_width/2 - player_w/2 - glob.Globals.camera_x) / Tiles.size
+    player_y = (window_height/2 - player_h/2 - glob.Globals.camera_y) / Tiles.size
+
     #RENDER GRAPHICS
     #Makes the background filled black
     # window.fill((0,0,0))
@@ -97,6 +110,8 @@ while isRunning:
     window.blit(Sky, (0,0))
 
     window.blit(terrain,(glob.Globals.camera_x, glob.Globals.camera_y))
+
+    player.render(window, (window_width/2 - player_w/2, window_height/2 - player_h/2))
 
 
     show_fps()
