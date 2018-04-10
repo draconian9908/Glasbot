@@ -18,4 +18,4 @@ class Player:
         self.faces = get_faces(sprite)
 
     def render(self, surface, pos):
-        surface.blit(self.faces[self.facing])
+        surface.blit(self.faces[self.facing], pos)

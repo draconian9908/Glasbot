@@ -1,4 +1,4 @@
-import pygame, sys, time
+import pygame, sys, time, math
 import Textures
 import glob
 from mapengine import *
@@ -15,7 +15,7 @@ Sky = pygame.Surface(sky.get_size(), pygame.HWSURFACE)
 Sky.blit(sky, (0,0))
 del sky
 
-terrain = Map_engine.load_map("maps/world.map")
+terrain = Map_engine.load_map("maps/testmap")
 
 
 
@@ -79,12 +79,18 @@ while isRunning:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
                 glob.Globals.camera_move = 1
+                player.facing = 'north'
             elif event.key == pygame.K_s:
                 glob.Globals.camera_move = 2
+                player.facing = 'south'
             elif event.key == pygame.K_a:
                 glob.Globals.camera_move = 3
+                player.facing = 'east'
             elif event.key == pygame.K_d:
                 glob.Globals.camera_move = 4
+                player.facing = 'west'
+            elif event.key == pygame.K_ESCAPE:
+                isRunning = False
 
         elif event.type == pygame.KEYUP:
             glob.Globals.camera_move = 0
@@ -92,13 +98,17 @@ while isRunning:
     #LOGIC
 
     if glob.Globals.camera_move == 1:
-        glob.Globals.camera_y += deltatime * 100
+        if not Tiles.blocked_at((round(player_x),math.floor(player_y))):
+            glob.Globals.camera_y += deltatime * 100
     elif glob.Globals.camera_move == 2:
-        glob.Globals.camera_y -= deltatime * 100
+        if not Tiles.blocked_at((round(player_x),math.ceil(player_y))):
+            glob.Globals.camera_y -= deltatime * 100
     elif glob.Globals.camera_move == 3:
-        glob.Globals.camera_x += deltatime * 100
+        if not Tiles.blocked_at((math.floor(player_x),round(player_y))):
+            glob.Globals.camera_x += deltatime * 100
     elif glob.Globals.camera_move == 4:
-        glob.Globals.camera_x -= deltatime * 100
+        if not Tiles.blocked_at((math.ceil(player_x),round(player_y))):
+            glob.Globals.camera_x -= deltatime * 100
 
     player_x = (window_width/2 - player_w/2 - glob.Globals.camera_x) / Tiles.size
     player_y = (window_height/2 - player_h/2 - glob.Globals.camera_y) / Tiles.size

@@ -41,4 +41,8 @@ class Map_engine:
             if tile[1] in Tiles.texture_tags:
                 Map_engine.add_tile(Tiles.texture_tags[tile[1]], tile[0], terrain)
 
+
+            if tile[1] in Tiles.blocked_types:
+                Tiles.blocked.append(tile[0])
+
         return terrain

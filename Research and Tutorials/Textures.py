@@ -6,6 +6,16 @@ class Tiles:
 
     size = 32
 
+    blocked = []
+
+    blocked_types = ["3"]
+
+    def blocked_at(pos):
+        if list(pos) in Tiles.blocked:
+            return True
+        else:
+            return False
+
     def load_texture(file, size):
         bitmap = pygame.image.load(file)
         bitmap = pygame.transform.scale(bitmap, (size, size))
