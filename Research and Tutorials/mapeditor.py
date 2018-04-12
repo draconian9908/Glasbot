@@ -25,6 +25,36 @@ def export_map(file):
     with open(file, 'w') as mapfile:
         mapfile.write(map_data)
 
+def load_map(file):
+
+    global tile_data
+    with open(file, "r") as mapfile:
+        map_data = mapfile.read()
+
+    map_data = map_data.split('-')
+
+    map_size = map_data[len(map_data)-1]
+    map_data.remove(map_size)
+    map_size = map_size.split(",")
+    map_size[0] = int(map_size[0]) * Tiles.size
+    map_size[1] = int(map_size[1]) * Tiles.size
+
+    tiles = []
+
+    for tile in range(len(map_data)):
+        map_data[tile] = map_data[tile].replace('\n','')
+        tiles.append(map_data[tile].split(":"))
+
+    for tile in tiles:
+        tile[0] = tile[0].split(",")
+        pos = tile[0]
+        for p in pos:
+            pos[pos.index(p)] = int(p)
+
+        tiles[tiles.index(tile)] = [pos[0] * Tiles.size, pos[1] * Tiles.size, tile[1]]
+
+    tile_data = tiles
+
 window = pygame.display.set_mode((1280,720), pygame.HWSURFACE)
 pygame.display.set_caption("Map Editor")
 
@@ -73,6 +103,10 @@ while isRunning:
                 camera_move = 4
             elif event.key == pygame.K_ESCAPE:
                 isRunning = False
+            elif event.key == pygame.K_l:
+                name = input("map name: ")
+                load_map("maps/" + name)
+                print("map loaded")
 
                 #brushes
             if event.key == pygame.K_r:
