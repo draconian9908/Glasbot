@@ -4,6 +4,7 @@ import glob
 from mapengine import *
 from player import *
 from NPC import *
+from inventory import *
 
 pygame.init()
 
@@ -65,7 +66,7 @@ player_w, player_h = player.width, player.height
 player_x = round(window_width/2 - player_w/2 - glob.Globals.camera_x) / Tiles.size
 player_y = round(window_height/2 - player_h/2 - glob.Globals.camera_y) / Tiles.size
 
-
+item = 'none'
 isRunning = True
 #Variable that is consistent when the game is running
 
@@ -79,18 +80,33 @@ while isRunning:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
                 glob.Globals.camera_move = 1
-                player.facing = 'north'
+                player.facing = item + 'north'
             elif event.key == pygame.K_s:
                 glob.Globals.camera_move = 2
-                player.facing = 'south'
+                player.facing = item + 'south'
             elif event.key == pygame.K_a:
                 glob.Globals.camera_move = 3
-                player.facing = 'east'
+                player.facing = item + 'east'
             elif event.key == pygame.K_d:
                 glob.Globals.camera_move = 4
-                player.facing = 'west'
+                player.facing = item + 'west'
+
             elif event.key == pygame.K_ESCAPE:
                 isRunning = False
+
+            elif event.key == pygame.K_1:
+                item = 'grass'
+            elif event.key == pygame.K_2:
+                item = 'flowers'
+            elif event.key == pygame.K_3:
+                item = 'tree'
+            elif event.key == pygame.K_4:
+                item = 'hoe'
+
+            #plant
+            # elif event.key == pygame.K_SPACE:
+            #     # tile = Tiles.texture_tags[]
+            #     player.points += inventory[item[1]]
 
         elif event.type == pygame.KEYUP:
             glob.Globals.camera_move = 0
@@ -122,6 +138,14 @@ while isRunning:
     window.blit(terrain,(glob.Globals.camera_x, glob.Globals.camera_y))
 
     player.render(window, (window_width/2 - player_w/2, window_height/2 - player_h/2))
+
+    text = fps_font.render("Score: %s" % player.points, 1, (255, 0, 0))
+    textpos = text.get_rect(centerx= 200, centery = 50)
+    window.blit(text, textpos)
+
+    htext = fps_font.render("Health: %s" % player.health, 1, (255, 0, 0))
+    hpos = htext.get_rect(centerx = 100, centery = 50)
+    window.blit(htext, hpos)
 
 
     show_fps()
