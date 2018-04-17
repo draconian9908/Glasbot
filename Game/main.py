@@ -18,6 +18,13 @@ Sky = pygame.Surface(sky.get_size(), pygame.HWSURFACE)
 Sky.blit(sky, (0,0))
 del sky
 
+logo_img_temp = pygame.image.load('Graphics/vine.jpg')
+#logo_img_temp = pygame.transform.scale(logo_img_temp, (900, 420))
+logo_img = pygame.Surface(logo_img_temp.get_size(), pygame.HWSURFACE)
+logo_img.blit(logo_img_temp, (0, 0))
+del logo_img_temp
+
+
 terrain = Map_engine.load_map("maps/testmap")
 
 
@@ -70,31 +77,42 @@ player_y = round(window_height/2 - player_h/2 - glob.Globals.camera_y) / Tiles.s
 
 item = 'none'
 
+#INITIALIZE MUSIC
+pygame.mixer.music.load('Music/title.wav')
+pygame.mixer.music.play(-1)
+#INITIALIZE SOUNDS
+btnSound = pygame.mixer.Sound('Sounds/btnClick.wav')
+
+
 #INITIALIZE GUI
 def Play():
     glob.Globals.scene = 'game'
+    pygame.mixer.music.load('Music/Hero - Logic Type Beat.wav')
+    pygame.mixer.music.play(-1)
 
 def Exit():
     global isRunning
     isRunning = False
 
-btnPlay = Menu.Button(text = "Play", rect = (0,0,500,60),
+btnPlay = Menu.Button(text = "Play", rect = (0,0,300,60),
                                 bg = Color.Gray, fg = Color.White,
                                 bgr = Color.CornflowerBlue, tag = ("menu", None))
 btnPlay.Left = window_width /2 - btnPlay.Width/2
 btnPlay.Top = window_height/2 - btnPlay.Height/2
 btnPlay.Command = Play
 
-btnExit = Menu.Button(text = 'Exit', rect = (0,0,500,60),
+btnExit = Menu.Button(text = 'Exit', rect = (0,0,300,60),
                         bg = Color.Gray, fg = Color.White,
                         bgr = Color.CornflowerBlue, tag = ("menu", None))
 btnExit.Left = btnPlay.Left
 btnExit.Top = btnPlay.Top + btnExit.Height + 3
 btnExit.Command = Exit
 
-menuTitle = Menu.Text(text = 'GLASBOT', color = Color.Cyan, font = Font.Large)
+menuTitle = Menu.Text(text = 'GLASBOT', color = Color.Black, font = Font.Large)
 
 menuTitle.Left, menuTitle.Top = window_width/2 - menuTitle.Width/2, 0
+
+logo = Menu.Image(bitmap = logo_img)
 
 isRunning = True
 #Variable that is consistent when the game is running
@@ -146,6 +164,7 @@ while isRunning:
                     if btn.Tag[0] == glob.Globals.scene and btn.Rolling:
                         if btn.Command != None:
                             btn.Command() #DO BUTTON EVENT
+                        btnSound.play()
                         btn.Rolling = False
                         break
 
@@ -193,6 +212,10 @@ while isRunning:
         #PROCESS MENU
     elif glob.Globals.scene == 'menu':
         window.fill(Color.Fog)
+
+        logo.Render(window, (0, -70))
+        logo.Left = window_width/2 - logo.Width/2
+        #logo.Top = window_height/2 - logo.Height/2
 
         menuTitle.Render(window)
 
