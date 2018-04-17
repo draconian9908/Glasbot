@@ -37,7 +37,7 @@ def show_fps():
 def create_window():
 #Creates the window for the game
 
-    global window, window_height, window_width, window_title
+    global window, window_height, window_width, window_title, clock
 
     window_width, window_height = 800, 600
     window_title = "Glasbot"
@@ -46,6 +46,7 @@ def create_window():
     pygame.display.set_caption(window_title)
     window = pygame.display.set_mode((window_width, window_height), pygame.HWSURFACE|pygame.DOUBLEBUF)
     #Actually makes the window with the title
+    clock = pygame.time.Clock()
 
 cSec = 0
 cFrame = 0
@@ -56,16 +57,9 @@ def count_fps():
 
     global cSec, cFrame, FPS, deltatime
 
-    if cSec == time.strftime("%S"):
-        cFrame += 1
-        #Adding the amount of frames
-    else:
-        FPS = cFrame
-        cFrame = 0
-        cSec = time.strftime("%S")
-        #Setting the value for FPS in that second and resetting process
-        if FPS > 0:
-            deltatime = 1/FPS
+    FPS = clock.get_fps()
+    if FPS > 0:
+        deltatime = 1/FPS
 
 #Calls the function to make the window
 create_window()
@@ -225,6 +219,7 @@ while isRunning:
 
     show_fps()
     pygame.display.update()
+    clock.tick()
     count_fps()
 
 pygame.quit()
