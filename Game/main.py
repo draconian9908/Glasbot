@@ -18,7 +18,7 @@ Sky = pygame.Surface(sky.get_size(), pygame.HWSURFACE)
 Sky.blit(sky, (0,0))
 del sky
 
-logo_img_temp = pygame.image.load('Graphics/vine.jpg')
+logo_img_temp = pygame.image.load('Graphics/back.jpg')
 #logo_img_temp = pygame.transform.scale(logo_img_temp, (900, 420))
 logo_img = pygame.Surface(logo_img_temp.get_size(), pygame.HWSURFACE)
 logo_img.blit(logo_img_temp, (0, 0))
@@ -26,6 +26,7 @@ del logo_img_temp
 
 
 terrain = Map_engine.load_map("maps/testmap")
+# overlay = Map_engine.load_map("maps/overlay")
 
 
 
@@ -69,7 +70,20 @@ player_w, player_h = player.width, player.height
 player_x = round(window_width/2 - player_w/2 - glob.Globals.camera_x) / Tiles.size
 player_y = round(window_height/2 - player_h/2 - glob.Globals.camera_y) / Tiles.size
 
-item = 'none'
+item = 'None'
+
+grass = Grass()
+grass_group = pygame.sprite.Group()
+grass_group.add(grass)
+
+flower = Flowers()
+flower_group = pygame.sprite.Group()
+flower_group.add(flower)
+
+tree = Tree()
+tree_group = pygame.sprite.Group()
+tree_group.add(tree)
+
 
 #INITIALIZE MUSIC
 pygame.mixer.music.load('Music/title.wav')
@@ -113,6 +127,8 @@ isRunning = True
 
 #Game loop created when the game is running
 while isRunning:
+
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
         #exits the game
@@ -144,10 +160,28 @@ while isRunning:
             elif event.key == pygame.K_4:
                 item = 'hoe'
 
-            #plant
-            # elif event.key == pygame.K_SPACE:
-            #     # tile = Tiles.texture_tags[]
-            #     player.points += inventory[item[1]]
+            # plant
+            elif event.key == pygame.K_SPACE:
+                if item == 'grass':
+                    player.points += grass.points
+                    if player.facing == 'grasssouth':
+                        # Map_engine.add_tile(Tiles.texture_tags['1'], (100,100), overlay)
+                        grass_group.add(Grass(368,300))
+                    elif player.facing == 'grassnorth':
+                        None
+                    elif player.facing == 'grasswest':
+                        None
+                    elif player.facing == 'grasseast':
+                        None
+                elif item == 'flowers':
+                    player.points += flower.points
+                elif item == 'tree':
+                    player.points += tree.points
+                elif item == 'hoe':
+                    None
+                elif item == 'None':
+                    None
+                print(player.facing)
 
         elif event.type == pygame.KEYUP:
             glob.Globals.camera_move = 0
@@ -182,18 +216,24 @@ while isRunning:
             if not Tiles.blocked_at((math.ceil(player_x),round(player_y))):
                 glob.Globals.camera_x -= deltatime * 100
 
+
         player_x = (window_width/2 - player_w/2 - glob.Globals.camera_x) / Tiles.size
         player_y = (window_height/2 - player_h/2 - glob.Globals.camera_y) / Tiles.size
 
         #RENDER GRAPHICS
-        #Makes the background filled black
-        # window.fill((0,0,0))
+
+
 
         window.blit(Sky, (0,0))
 
         window.blit(terrain,(glob.Globals.camera_x, glob.Globals.camera_y))
 
+        grass_group.draw(window)
+        flower_group.draw(window)
+        tree_group.draw(window)
+
         player.render(window, (window_width/2 - player_w/2, window_height/2 - player_h/2))
+
 
         text = fps_font.render("Score: %s" % player.points, 1, (255, 0, 0))
         textpos = text.get_rect(centerx= 200, centery = 50)

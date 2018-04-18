@@ -1,28 +1,49 @@
-class Item(object):
+import pygame
+import glob
 
-    def __init__(self, name, points, damage, amount, key):
-        self.name = name
-        self.points = points
-        self.damage = damage
-        self.amount = amount
-        self.key = key
+class Grass(pygame.sprite.Sprite):
+    def __init__(self, x=-1000, y=-1000):
+        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
+        self.image = (pygame.image.load('Graphics/grass.png'))
+        self.points = 1
+        self.amount = 20
+        self.rect = self.image.get_rect()
+        self.rect.y = y
+        self.rect.x = x
+        self.change_x = 0
+        self.change_y = 0
+    def update(self):
+        self.change_x = glob.Globals.move_x
+        self.change_y = glob.Globals.move_y
+        self.rect.x += self.change_x
+        self.rect.y += self.change_y
 
-class Inventory(object):
 
+class Flowers(pygame.sprite.Sprite):
+    def __init__(self, x=-1000, y=-1000):
+        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
+        self.image = (pygame.image.load('Graphics/flowers.png'))
+        self.points = 2
+        self.amount = 10
+        self.rect = self.image.get_rect()
+        self.rect.y = y
+        self.rect.x = x
+
+class Tree(pygame.sprite.Sprite):
+    def __init__(self, x=-1000, y=-1000):
+        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
+        self.image = (pygame.image.load('Graphics/tree.png'))
+        self.points = 4
+        self.amount = 2
+        self.rect = self.image.get_rect()
+        self.rect.y = y
+        self.rect.x = x
+
+class hoe(pygame.sprite.Sprite):
     def __init__(self):
-        self.items = {}
-
-    def add_item(self, item):
-        self.items[item.name] = item
-
-    def print_items(self):
-        print('\t'.join(['Name', 'Points', 'Damage', 'Amount', 'Key']))
-        for item in self.items.values():
-            print('\t'.join([str(x) for x in [item.name, item.points, item.damage, item.amount, item.key]]))
-
-inventory = Inventory()
-inventory.add_item(Item('grass', 1, 0, 20, 11))
-inventory.add_item(Item('flowers', 2, 0, 10, 12))
-inventory.add_item(Item('tree', 4, 0, 5, 13))
-inventory.add_item(Item('hoe', 0, 1, 1, 14))
-inventory.print_items()
+        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
+        self.damage = 1

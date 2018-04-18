@@ -84,7 +84,7 @@ brush = '2'
 
 for x in range(0, map_width, Tiles.size):
     for y in range(0, map_height, Tiles.size):
-        tile_data.append([x,y, "2"])
+        tile_data.append([x,y, "5"])
 
 isRunning = True
 
@@ -119,6 +119,8 @@ while isRunning:
                 brush = '3'
             elif event.key == pygame.K_4:
                 brush = '4'
+            elif event.key == pygame.K_5:
+                brush = '5'
 
             #save map
             elif event.key == pygame.K_RETURN:
@@ -170,7 +172,7 @@ while isRunning:
     # Draw map
     for tile in tile_data:
         try:
-            window.blit(Tiles.texture_tags[tile[2]], (tile[0] + camera_x, tile[1] + camera_y))
+            window.blit(Tiles.texture_tags[tile[5]], (tile[0] + camera_x, tile[1] + camera_y))
         except:
             pass
 

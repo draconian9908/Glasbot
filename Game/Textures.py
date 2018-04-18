@@ -29,5 +29,6 @@ class Tiles:
     stone = load_texture("Graphics/stone.png", size)
     water = load_texture("Graphics/water.png", size)
     dirt = load_texture("Graphics/dirt.png", size)
+    empty = load_texture("Graphics/empty.png", size)
 
-    texture_tags = {"1": grass, "2":stone, "3": water, "4": dirt}
+    texture_tags = {"1": grass, "2":stone, "3": water, "4": dirt, '5':empty}

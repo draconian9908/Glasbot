@@ -7,7 +7,7 @@ class Player:
 
     def __init__(self,name):
         self.name = name
-        self.facing = "nonesouth"
+        self.facing = "Nonesouth"
         self.health = 100
         sprite = pygame.image.load("Graphics/player.png")
         size = sprite.get_size()
