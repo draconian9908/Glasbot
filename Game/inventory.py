@@ -11,11 +11,9 @@ class Grass(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
-        self.change_x = 0
-        self.change_y = 0
+        self.change_x = -1
+        self.change_y = -1
     def update(self):
-        self.change_x = glob.Globals.move_x
-        self.change_y = glob.Globals.move_y
         self.rect.x += self.change_x
         self.rect.y += self.change_y
 
