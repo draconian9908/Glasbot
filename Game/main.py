@@ -7,6 +7,7 @@ from NPC import *
 from inventory import *
 from meloonatic_gui import *
 from UltraColor import *
+from collectable import *
 
 
 pygame.init()
@@ -29,6 +30,8 @@ del logo_img_temp
 
 terrain = Map_engine.load_map("maps/testmap")
 
+
+# Reads the map given and makes the data into lists so we can read it
 global tile_data
 with open('maps/testmap', "r") as mapfile:
     map_data = mapfile.read()
@@ -59,13 +62,18 @@ tile_data = tiles
 
 placeable_tiles = []
 
+# Making a list of tiles that can have tiles placed on top - right now set to grass, dirt, tree and flower
 for tile in tile_data:
+    # if grass
     if tile[2] == '1':
         placeable_tiles.append(tile)
+    # if dirt
     if tile[2] == '4':
         placeable_tiles.append(tile)
+    # if flower
     if tile[2] == '6':
         placeable_tiles.append(tile)
+    # if tree
     if tile[2] == '7':
         placeable_tiles.append(tile)
 
@@ -196,55 +204,71 @@ while isRunning:
 
             # plant
             elif event.key == pygame.K_SPACE:
+                # Placement directions
+                x_south_north = round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size
+                y_south = round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size
+                y_north = round((window_height/2 - player_h/2 - glob.Globals.camera_y - 32)/Tiles.size)*Tiles.size
+
+                y_west_east = round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size
+                x_west = round((window_width/2 - player_w/2 - glob.Globals.camera_x +32)/Tiles.size)*Tiles.size
+                x_east = round((window_width/2 - player_w/2 - glob.Globals.camera_x - 32)/Tiles.size)*Tiles.size
+
+                # Texture packs
+                grass_texture = '1'
+                flower_texture = '6'
+                tree_texture = '7'
+
+                # Sees which item is in hand and then makes sure there are seeds to place
                 if item == 'grass':
                     if grass.amount == 0:
+                        # if inventory is empty does not allow to place
                         tile1 = [0,0,'5']
                     else:
+                        # if it is in inventory base direction off of way facing and texture out of item
                         if player.facing == 'grasssouth':
-                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '1']
+                            tile1 = [x_south_north, y_south, grass_texture]
                         elif player.facing == 'grassnorth':
-                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y - 32)/Tiles.size)*Tiles.size, '1']
+                            tile1 = [x_south_north, y_north, grass_texture]
                         elif player.facing == 'grasswest':
-                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x +32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '1']
+                            tile1 = [x_west, y_west_east, grass_texture]
                         elif player.facing == 'grasseast':
-                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x - 32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '1']
+                            tile1 = [x_east, y_west_east , grass_texture]
                 elif item == 'flowers':
                     if flower.amount == 0:
                         tile1 = [0,0,'5']
                     else:
                         if player.facing == 'flowerssouth':
-                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '6']
+                            tile1 = [x_south_north, y_south, flower_texture]
                         elif player.facing == 'flowersnorth':
-                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y - 32)/Tiles.size)*Tiles.size, '6']
+                            tile1 = [x_south_north, y_north, flower_texture]
                         elif player.facing == 'flowerswest':
-                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x +32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '6']
+                            tile1 = [x_west, y_west_east, flower_texture]
                         elif player.facing == 'flowerseast':
-                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x - 32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '6']
+                            tile1 = [x_east, y_west_east, flower_texture]
                 elif item == 'tree':
                     if tree.amount == 0:
                         tile1 = [0,0,'5']
                     else:
                         if player.facing == 'treesouth':
-                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '7']
+                            tile1 = [x_south_north, y_south, tree_texture]
                         elif player.facing == 'treenorth':
-                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y - 32)/Tiles.size)*Tiles.size, '7']
+                            tile1 = [x_south_north, y_north, tree_texture]
                         elif player.facing == 'treewest':
-                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x +32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '7']
+                            tile1 = [x_west, y_west_east, tree_texture]
                         elif player.facing == 'treeeast':
-                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x - 32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '7']
-                elif item == 'hoe':
-                    None
-                elif item == 'None':
-                    None
-                print(player.facing)
+                            tile1 = [x_west, y_west_east, tree_texture]
 
-                contain = False
+                # Tile1 is reassigned to match the direction and item in hand
 
+                # Sees if the position of the tile1 - want to place is in the tiles that can be
+                # placed over
                 for t in placeable_tiles:
                     if t[0] == tile1[0] and t[1] == tile1[1]:
                         contain = True
                 if contain:
+                    # if it is a tile that can be placed over - place the tile
                     terrain.blit(Tiles.texture_tags[tile1[2]],(tile1[0], tile1[1]))
+                    # update the score and contents of inventory based on action and item
                     if item == 'grass':
                         grass.amount -= 1
                         player.points += grass.points
@@ -254,6 +278,15 @@ while isRunning:
                     elif item =='tree':
                         tree.amount -= 1
                         player.points += tree.points
+
+                elif item == 'hoe':
+                    None
+                elif item == 'None':
+                    None
+                print(player.facing)
+
+                contain = False
+
 
         elif event.type == pygame.KEYUP:
             glob.Globals.camera_move = 0
@@ -308,15 +341,20 @@ while isRunning:
         hpos = htext.get_rect(centerx = 100, centery = 50)
         window.blit(htext, hpos)
 
+        # inventory display
+
+        # inventory title blit
         itext = fps_font.render("Inventory", 1, (255, 255, 255))
         ipos = htext.get_rect(centerx = 400, centery = 550)
         window.blit(itext, ipos)
 
+        # Display the tiles at bottom of the screen
         window.blit(grass.image, (grass.rect.x, grass.rect.y))
         window.blit(flower.image, (flower.rect.x, flower.rect.y))
         window.blit(tree.image, (tree.rect.x, tree.rect.y))
         window.blit(hoe.image, (hoe.rect.x, hoe.rect.y))
 
+        # Display the amounts in the inventory on the pictures at bottom of the screen
         gatext = amount_font.render("%s" % grass.amount, 1, (255,255,255))
         gapos = gatext.get_rect(centerx = 356, centery = 580)
         window.blit(gatext, gapos)
@@ -329,6 +367,7 @@ while isRunning:
         trpos = trtext.get_rect(centerx = 420, centery = 580)
         window.blit(trtext, trpos)
 
+        # Will display the white border on top of corresponding inventory item based on selected item in hand
         if item == 'grass':
             window.blit(pygame.image.load("Graphics/border.png"), (grass.rect.x, grass.rect.y))
         elif item == 'flowers':
@@ -337,6 +376,11 @@ while isRunning:
             window.blit(pygame.image.load("Graphics/border.png"), (tree.rect.x, tree.rect.y))
         elif item == 'hoe':
             window.blit(pygame.image.load("Graphics/border.png"), (hoe.rect.x, hoe.rect.y))
+
+        for bag in bag_group:
+            tile = bag.tile
+            terrain.blit(tile[0], (tile[1], tile[2]))
+
 
         #PROCESS MENU
     elif glob.Globals.scene == 'menu':

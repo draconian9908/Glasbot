@@ -15,6 +15,8 @@ class Player:
         self.height = size[1]
         self.points = 0
 
+        self.image = pygame.image.load("Graphics/player.png")
+        self.rect = self.image.get_rect()
         # Get player faces
         self.faces = get_faces(sprite)
 
