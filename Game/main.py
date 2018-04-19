@@ -200,8 +200,6 @@ while isRunning:
                     if grass.amount == 0:
                         tile1 = [0,0,'5']
                     else:
-                        player.points += grass.points
-                        grass.amount -= 1
                         if player.facing == 'grasssouth':
                             tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '1']
                         elif player.facing == 'grassnorth':
@@ -214,8 +212,6 @@ while isRunning:
                     if flower.amount == 0:
                         tile1 = [0,0,'5']
                     else:
-                        player.points += flower.points
-                        flower.amount -= 1
                         if player.facing == 'flowerssouth':
                             tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '6']
                         elif player.facing == 'flowersnorth':
@@ -228,8 +224,6 @@ while isRunning:
                     if tree.amount == 0:
                         tile1 = [0,0,'5']
                     else:
-                        player.points += tree.points
-                        tree.amount -= 1
                         if player.facing == 'treesouth':
                             tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '7']
                         elif player.facing == 'treenorth':
@@ -250,17 +244,16 @@ while isRunning:
                     if t[0] == tile1[0] and t[1] == tile1[1]:
                         contain = True
                 if contain:
-                        terrain.blit(Tiles.texture_tags[tile1[2]],(tile1[0], tile1[1]))
-                else:
+                    terrain.blit(Tiles.texture_tags[tile1[2]],(tile1[0], tile1[1]))
                     if item == 'grass':
-                        grass.amount += 1
-                        player.points -= grass.points
+                        grass.amount -= 1
+                        player.points += grass.points
                     elif item =='flowers':
-                        flower.amount += 1
-                        player.points -= flower.points
+                        flower.amount -= 1
+                        player.points += flower.points
                     elif item =='tree':
-                        tree.amount += 1
-                        player.points -= tree.points
+                        tree.amount -= 1
+                        player.points += tree.points
 
         elif event.type == pygame.KEYUP:
             glob.Globals.camera_move = 0
@@ -303,22 +296,6 @@ while isRunning:
         window.blit(Sky, (0,0))
 
         window.blit(terrain,(glob.Globals.camera_x, glob.Globals.camera_y))
-
-        # for t in placeable_tiles:
-        #     if t[0] == tile1[0] and t[1] == tile1[1]:
-        #         terrain.blit(Tiles.texture_tags[tile1[2]],(tile1[0], tile1[1]))
-        #     else:
-        #         if item == 'grass':
-        #             grass.amount += 1
-        #             player.points -= grass.points
-        #         elif item =='flowers':
-        #             flower.amount += 1
-        #             player.points -= flower.points
-        #         elif item =='tree':
-        #             tree.amount += 1
-        #             player.points -= tree.points
-
-
 
         player.render(window, (window_width/2 - player_w/2, window_height/2 - player_h/2))
 
