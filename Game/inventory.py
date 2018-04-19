@@ -35,8 +35,13 @@ class Tree(pygame.sprite.Sprite):
         self.rect.y = y
         self.rect.x = x
 
-class hoe(pygame.sprite.Sprite):
-    def __init__(self):
+class Hoe(pygame.sprite.Sprite):
+    def __init__(self, x=-1000, y=-1000):
         pygame.sprite.Sprite.__init__(self)
         super().__init__()
         self.damage = 1
+        self.image = (pygame.image.load("Graphics/hoe.png"))
+        self.rect = self.image.get_rect()
+        self.rect.y = y
+        self.rect.x = x
+        self.amount = 1

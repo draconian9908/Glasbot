@@ -13,6 +13,7 @@ pygame.init()
 
 pygame.font.init()
 fps_font = pygame.font.Font(None, 20)
+amount_font = pygame.font.Font(None, 20)
 
 sky = pygame.image.load("Graphics/sky.png")
 Sky = pygame.Surface(sky.get_size(), pygame.HWSURFACE)
@@ -70,18 +71,10 @@ player_x = round(window_width/2 - player_w/2 - glob.Globals.camera_x) / Tiles.si
 player_y = round(window_height/2 - player_h/2 - glob.Globals.camera_y) / Tiles.size
 
 item = 'None'
-
-grass = Grass()
-grass_group = pygame.sprite.Group()
-grass_group.add(grass)
-
-flower = Flowers()
-flower_group = pygame.sprite.Group()
-flower_group.add(flower)
-
-tree = Tree()
-tree_group = pygame.sprite.Group()
-tree_group.add(tree)
+grass = Grass(336, 560)
+flower = Flowers(368, 560)
+tree = Tree(400, 560)
+hoe = Hoe(432, 560)
 
 tile1 = [0,0,'5']
 
@@ -163,36 +156,47 @@ while isRunning:
             # plant
             elif event.key == pygame.K_SPACE:
                 if item == 'grass':
-                    player.points += grass.points
-                    if player.facing == 'grasssouth':
-                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '1']
-                        # grass_group.add(Grass(round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size))
-                    elif player.facing == 'grassnorth':
-                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y - 32)/Tiles.size)*Tiles.size, '1']
-                    elif player.facing == 'grasswest':
-                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x +32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '1']
-                    elif player.facing == 'grasseast':
-                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x - 32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '1']
+                    if grass.amount == 0:
+                        tile1 = [0,0,'5']
+                    else:
+                        player.points += grass.points
+                        grass.amount -= 1
+                        if player.facing == 'grasssouth':
+                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '1']
+                        elif player.facing == 'grassnorth':
+                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y - 32)/Tiles.size)*Tiles.size, '1']
+                        elif player.facing == 'grasswest':
+                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x +32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '1']
+                        elif player.facing == 'grasseast':
+                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x - 32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '1']
                 elif item == 'flowers':
-                    player.points += flower.points
-                    if player.facing == 'flowerssouth':
-                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '6']
-                    elif player.facing == 'flowersnorth':
-                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y - 32)/Tiles.size)*Tiles.size, '6']
-                    elif player.facing == 'flowerswest':
-                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x +32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '6']
-                    elif player.facing == 'flowerseast':
-                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x - 32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '6']
+                    if flower.amount == 0:
+                        tile1 = [0,0,'5']
+                    else:
+                        player.points += flower.points
+                        flower.amount -= 1
+                        if player.facing == 'flowerssouth':
+                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '6']
+                        elif player.facing == 'flowersnorth':
+                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y - 32)/Tiles.size)*Tiles.size, '6']
+                        elif player.facing == 'flowerswest':
+                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x +32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '6']
+                        elif player.facing == 'flowerseast':
+                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x - 32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '6']
                 elif item == 'tree':
-                    player.points += tree.points
-                    if player.facing == 'treesouth':
-                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '7']
-                    elif player.facing == 'treenorth':
-                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y - 32)/Tiles.size)*Tiles.size, '7']
-                    elif player.facing == 'treewest':
-                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x +32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '7']
-                    elif player.facing == 'treeeast':
-                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x - 32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '7']
+                    if tree.amount == 0:
+                        tile1 = [0,0,'5']
+                    else:
+                        player.points += tree.points
+                        tree.amount -= 1
+                        if player.facing == 'treesouth':
+                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '7']
+                        elif player.facing == 'treenorth':
+                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y - 32)/Tiles.size)*Tiles.size, '7']
+                        elif player.facing == 'treewest':
+                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x +32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '7']
+                        elif player.facing == 'treeeast':
+                            tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x - 32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '7']
                 elif item == 'hoe':
                     None
                 elif item == 'None':
@@ -243,11 +247,8 @@ while isRunning:
         window.blit(terrain,(glob.Globals.camera_x, glob.Globals.camera_y))
 
         terrain.blit(Tiles.texture_tags[tile1[2]],(tile1[0], tile1[1]))
-        #
-        #
-        # grass_group.draw(window)
-        # flower_group.draw(window)
-        # tree_group.draw(window)
+
+
 
         player.render(window, (window_width/2 - player_w/2, window_height/2 - player_h/2))
 
@@ -259,6 +260,36 @@ while isRunning:
         htext = fps_font.render("Health: %s" % player.health, 1, (255, 0, 0))
         hpos = htext.get_rect(centerx = 100, centery = 50)
         window.blit(htext, hpos)
+
+        itext = fps_font.render("Inventory", 1, (255, 255, 255))
+        ipos = htext.get_rect(centerx = 400, centery = 550)
+        window.blit(itext, ipos)
+
+        window.blit(grass.image, (grass.rect.x, grass.rect.y))
+        window.blit(flower.image, (flower.rect.x, flower.rect.y))
+        window.blit(tree.image, (tree.rect.x, tree.rect.y))
+        window.blit(hoe.image, (hoe.rect.x, hoe.rect.y))
+
+        gatext = amount_font.render("%s" % grass.amount, 1, (255,255,255))
+        gapos = gatext.get_rect(centerx = 356, centery = 580)
+        window.blit(gatext, gapos)
+
+        fltext = amount_font.render("%s" % flower.amount, 1, (255,255,255))
+        flpos = fltext.get_rect(centerx = 388, centery = 580)
+        window.blit(fltext, flpos)
+
+        trtext = amount_font.render("%s" % tree.amount, 1, (255,255,255))
+        trpos = trtext.get_rect(centerx = 420, centery = 580)
+        window.blit(trtext, trpos)
+
+        if item == 'grass':
+            window.blit(pygame.image.load("Graphics/border.png"), (grass.rect.x, grass.rect.y))
+        elif item == 'flowers':
+            window.blit(pygame.image.load("Graphics/border.png"), (flower.rect.x, flower.rect.y))
+        elif item == 'tree':
+            window.blit(pygame.image.load("Graphics/border.png"), (tree.rect.x, tree.rect.y))
+        elif item == 'hoe':
+            window.blit(pygame.image.load("Graphics/border.png"), (hoe.rect.x, hoe.rect.y))
 
         #PROCESS MENU
     elif glob.Globals.scene == 'menu':
