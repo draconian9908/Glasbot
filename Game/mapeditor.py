@@ -84,7 +84,7 @@ brush = '2'
 
 for x in range(0, map_width, Tiles.size):
     for y in range(0, map_height, Tiles.size):
-        tile_data.append([x,y, "5"])
+        tile_data.append([x,y, "2"])
 
 isRunning = True
 

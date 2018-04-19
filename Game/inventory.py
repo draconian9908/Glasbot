@@ -11,11 +11,6 @@ class Grass(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
-        self.change_x = -1
-        self.change_y = -1
-    def update(self):
-        self.rect.x += self.change_x
-        self.rect.y += self.change_y
 
 
 class Flowers(pygame.sprite.Sprite):

@@ -28,35 +28,6 @@ del logo_img_temp
 
 terrain = Map_engine.load_map("maps/testmap")
 
-# global tile_data
-# with open("maps/testmap", "r") as mapfile:
-#     map_data = mapfile.read()
-#
-# map_data = map_data.split('-')
-#
-# map_size = map_data[len(map_data)-1]
-# map_data.remove(map_size)
-# map_size = map_size.split(",")
-# map_size[0] = int(map_size[0]) * Tiles.size
-# map_size[1] = int(map_size[1]) * Tiles.size
-#
-# tiles = []
-#
-# for tile in range(len(map_data)):
-#     map_data[tile] = map_data[tile].replace('\n','')
-#     tiles.append(map_data[tile].split(":"))
-#
-# for tile in tiles:
-#     tile[0] = tile[0].split(",")
-#     pos = tile[0]
-#     for p in pos:
-#         pos[pos.index(p)] = int(p)
-#
-# tiles[tiles.index(tile)] = [pos[0] * Tiles.size, pos[1] * Tiles.size, tile[1]]
-#
-# tile_data = tiles
-#
-
 
 def show_fps():
 #Shows fps on the screen
@@ -112,6 +83,7 @@ tree = Tree()
 tree_group = pygame.sprite.Group()
 tree_group.add(tree)
 
+tile1 = [0,0,'5']
 
 #INITIALIZE MUSIC
 pygame.mixer.music.load('Music/title.wav')
@@ -193,30 +165,40 @@ while isRunning:
                 if item == 'grass':
                     player.points += grass.points
                     if player.facing == 'grasssouth':
-                        # Map_engine.add_tile(Tiles.texture_tags['1'], (100,100), overlay)
-                        # grass_group.add(Grass(368,300))
-                        # tile1 = [glob.Globals.camera_x, glob.Globals.camera_y, '3']
-                        # for t in tile_data:
-                        #     if t[0] == tile1[0] and t[1] == tile1[1] and t[2] != '3':
-                        #         tile_data.remove(t)
-                        #         tile_data.append(tile1)
-                        #     else:
-                        #         None
+                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '1']
+                        # grass_group.add(Grass(round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size))
                     elif player.facing == 'grassnorth':
-                        None
+                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y - 32)/Tiles.size)*Tiles.size, '1']
                     elif player.facing == 'grasswest':
-                        None
+                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x +32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '1']
                     elif player.facing == 'grasseast':
-                        None
+                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x - 32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '1']
                 elif item == 'flowers':
                     player.points += flower.points
+                    if player.facing == 'flowerssouth':
+                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '6']
+                    elif player.facing == 'flowersnorth':
+                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y - 32)/Tiles.size)*Tiles.size, '6']
+                    elif player.facing == 'flowerswest':
+                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x +32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '6']
+                    elif player.facing == 'flowerseast':
+                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x - 32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '6']
                 elif item == 'tree':
                     player.points += tree.points
+                    if player.facing == 'treesouth':
+                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size, '7']
+                    elif player.facing == 'treenorth':
+                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y - 32)/Tiles.size)*Tiles.size, '7']
+                    elif player.facing == 'treewest':
+                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x +32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '7']
+                    elif player.facing == 'treeeast':
+                        tile1 = [round((window_width/2 - player_w/2 - glob.Globals.camera_x - 32)/Tiles.size)*Tiles.size, round((window_height/2 - player_h/2 - glob.Globals.camera_y)/Tiles.size)*Tiles.size, '7']
                 elif item == 'hoe':
                     None
                 elif item == 'None':
                     None
                 print(player.facing)
+
 
         elif event.type == pygame.KEYUP:
             glob.Globals.camera_move = 0
@@ -232,7 +214,6 @@ while isRunning:
                         break
 
     #RENDER SCENEelif glob.Globals.scene == 'menu':
-
 
     if glob.Globals.scene == 'game':
 
@@ -257,15 +238,16 @@ while isRunning:
 
         #RENDER GRAPHICS
 
-
-
         window.blit(Sky, (0,0))
 
         window.blit(terrain,(glob.Globals.camera_x, glob.Globals.camera_y))
 
-        grass_group.draw(window)
-        flower_group.draw(window)
-        tree_group.draw(window)
+        terrain.blit(Tiles.texture_tags[tile1[2]],(tile1[0], tile1[1]))
+        #
+        #
+        # grass_group.draw(window)
+        # flower_group.draw(window)
+        # tree_group.draw(window)
 
         player.render(window, (window_width/2 - player_w/2, window_height/2 - player_h/2))
 
