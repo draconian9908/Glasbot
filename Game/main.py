@@ -29,6 +29,47 @@ del logo_img_temp
 
 terrain = Map_engine.load_map("maps/testmap")
 
+global tile_data
+with open('maps/testmap', "r") as mapfile:
+    map_data = mapfile.read()
+
+map_data = map_data.split('-')
+
+map_size = map_data[len(map_data)-1]
+map_data.remove(map_size)
+map_size = map_size.split(",")
+map_size[0] = int(map_size[0]) * Tiles.size
+map_size[1] = int(map_size[1]) * Tiles.size
+
+tiles = []
+
+for tile in range(len(map_data)):
+    map_data[tile] = map_data[tile].replace('\n','')
+    tiles.append(map_data[tile].split(":"))
+
+for tile in tiles:
+    tile[0] = tile[0].split(",")
+    pos = tile[0]
+    for p in pos:
+        pos[pos.index(p)] = int(p)
+
+    tiles[tiles.index(tile)] = [pos[0] * Tiles.size, pos[1] * Tiles.size, tile[1]]
+
+tile_data = tiles
+
+placeable_tiles = []
+
+for tile in tile_data:
+    if tile[2] == '1':
+        placeable_tiles.append(tile)
+    if tile[2] == '4':
+        placeable_tiles.append(tile)
+    if tile[2] == '6':
+        placeable_tiles.append(tile)
+    if tile[2] == '7':
+        placeable_tiles.append(tile)
+
+print(placeable_tiles)
 
 def show_fps():
 #Shows fps on the screen
@@ -203,6 +244,23 @@ while isRunning:
                     None
                 print(player.facing)
 
+                contain = False
+
+                for t in placeable_tiles:
+                    if t[0] == tile1[0] and t[1] == tile1[1]:
+                        contain = True
+                if contain:
+                        terrain.blit(Tiles.texture_tags[tile1[2]],(tile1[0], tile1[1]))
+                else:
+                    if item == 'grass':
+                        grass.amount += 1
+                        player.points -= grass.points
+                    elif item =='flowers':
+                        flower.amount += 1
+                        player.points -= flower.points
+                    elif item =='tree':
+                        tree.amount += 1
+                        player.points -= tree.points
 
         elif event.type == pygame.KEYUP:
             glob.Globals.camera_move = 0
@@ -246,18 +304,30 @@ while isRunning:
 
         window.blit(terrain,(glob.Globals.camera_x, glob.Globals.camera_y))
 
-        terrain.blit(Tiles.texture_tags[tile1[2]],(tile1[0], tile1[1]))
+        # for t in placeable_tiles:
+        #     if t[0] == tile1[0] and t[1] == tile1[1]:
+        #         terrain.blit(Tiles.texture_tags[tile1[2]],(tile1[0], tile1[1]))
+        #     else:
+        #         if item == 'grass':
+        #             grass.amount += 1
+        #             player.points -= grass.points
+        #         elif item =='flowers':
+        #             flower.amount += 1
+        #             player.points -= flower.points
+        #         elif item =='tree':
+        #             tree.amount += 1
+        #             player.points -= tree.points
 
 
 
         player.render(window, (window_width/2 - player_w/2, window_height/2 - player_h/2))
 
 
-        text = fps_font.render("Score: %s" % player.points, 1, (255, 0, 0))
+        text = fps_font.render("Score: %s" % player.points, 1, (255, 255, 255))
         textpos = text.get_rect(centerx= 200, centery = 50)
         window.blit(text, textpos)
 
-        htext = fps_font.render("Health: %s" % player.health, 1, (255, 0, 0))
+        htext = fps_font.render("Health: %s" % player.health, 1, (255, 255, 255))
         hpos = htext.get_rect(centerx = 100, centery = 50)
         window.blit(htext, hpos)
 
