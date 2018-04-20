@@ -84,7 +84,7 @@ brush = '2'
 
 for x in range(0, map_width, Tiles.size):
     for y in range(0, map_height, Tiles.size):
-        tile_data.append([x,y, "2"])
+        tile_data.append([x,y, "4"])
 
 isRunning = True
 
@@ -172,7 +172,7 @@ while isRunning:
     # Draw map
     for tile in tile_data:
         try:
-            window.blit(Tiles.texture_tags[tile[5]], (tile[0] + camera_x, tile[1] + camera_y))
+            window.blit(Tiles.texture_tags[tile[2]], (tile[0] + camera_x, tile[1] + camera_y))
         except:
             pass
 

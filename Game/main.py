@@ -28,12 +28,12 @@ logo_img.blit(logo_img_temp, (0, 0))
 del logo_img_temp
 
 
-terrain = Map_engine.load_map("maps/testmap")
+terrain = Map_engine.load_map("maps/demo_map")
 
 
 # Reads the map given and makes the data into lists so we can read it
 global tile_data
-with open('maps/testmap', "r") as mapfile:
+with open('maps/demo_map', "r") as mapfile:
     map_data = mapfile.read()
 
 map_data = map_data.split('-')
@@ -105,11 +105,11 @@ FPS = 0
 def count_fps():
 #Keeps track of the fps of the game
 
-    global cSec, cFrame, FPS, deltatime
+    global cSec, cFrame, FPS
 
     FPS = clock.get_fps()
     if FPS > 0:
-        deltatime = 1/FPS
+        glob.Globals.deltatime = 1/FPS
 
 #Calls the function to make the window
 create_window()
@@ -119,6 +119,8 @@ player_w, player_h = player.width, player.height
 player_x = round(window_width/2 - player_w/2 - glob.Globals.camera_x) / Tiles.size
 player_y = round(window_height/2 - player_h/2 - glob.Globals.camera_y) / Tiles.size
 
+
+
 item = 'None'
 grass = Grass(336, 560)
 flower = Flowers(368, 560)
@@ -126,6 +128,8 @@ tree = Tree(400, 560)
 hoe = Hoe(432, 560)
 
 tile1 = [0,0,'5']
+
+test_npc = TestNPC(name = 'cookie', pos = (200, 300))
 
 #INITIALIZE MUSIC
 #pygame.mixer.music.load('Music/title.wav')
@@ -348,16 +352,16 @@ while isRunning:
 
         if glob.Globals.camera_move == 1:
             if not Tiles.blocked_at((round(player_x),math.floor(player_y))):
-                glob.Globals.camera_y += deltatime * 100
+                glob.Globals.camera_y += glob.Globals.deltatime * 100
         elif glob.Globals.camera_move == 2:
             if not Tiles.blocked_at((round(player_x),math.ceil(player_y))):
-                glob.Globals.camera_y -= deltatime * 100
+                glob.Globals.camera_y -= glob.Globals.deltatime * 100
         elif glob.Globals.camera_move == 3:
             if not Tiles.blocked_at((math.floor(player_x),round(player_y))):
-                glob.Globals.camera_x += deltatime * 100
+                glob.Globals.camera_x += glob.Globals.deltatime * 100
         elif glob.Globals.camera_move == 4:
             if not Tiles.blocked_at((math.ceil(player_x),round(player_y))):
-                glob.Globals.camera_x -= deltatime * 100
+                glob.Globals.camera_x -= glob.Globals.deltatime * 100
 
 
         for bag in bag_group:
@@ -389,6 +393,9 @@ while isRunning:
         window.blit(Sky, (0,0))
 
         window.blit(terrain,(glob.Globals.camera_x, glob.Globals.camera_y))
+
+        for npc in NPC.all_npc:
+            npc.render(window)
 
         player.render(window, (window_width/2 - player_w/2, window_height/2 - player_h/2))
 
@@ -455,9 +462,6 @@ while isRunning:
             if btn.Tag[0] == "menu":
                 btn.Render(window)
 
-        intext = amount_font.render("Collect seeds from bags hidden arount the map and plant them on dirt", 1, (255,255,255))
-        inpos = intext.get_rect(centerx = 400, centery = 520)
-        window.blit(intext, inpos)
 
     elif glob.Globals.scene == 'instructions':
 
