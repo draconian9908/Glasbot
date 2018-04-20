@@ -128,8 +128,8 @@ hoe = Hoe(432, 560)
 tile1 = [0,0,'5']
 
 #INITIALIZE MUSIC
-pygame.mixer.music.load('Music/title.wav')
-pygame.mixer.music.play(-1)
+#pygame.mixer.music.load('Music/title.wav')
+#pygame.mixer.music.play(-1)
 #INITIALIZE SOUNDS
 btnSound = pygame.mixer.Sound('Sounds/btnClick.wav')
 
@@ -137,7 +137,7 @@ btnSound = pygame.mixer.Sound('Sounds/btnClick.wav')
 #INITIALIZE GUI
 def Play():
     glob.Globals.scene = 'game'
-    pygame.mixer.music.load('Music/Hero - Logic Type Beat.wav')
+    pygame.mixer.music.load('Music/Abyss(1).wav')
     pygame.mixer.music.play(-1)
 
 def Exit():
