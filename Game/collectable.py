@@ -17,8 +17,11 @@ class Bag(pygame.sprite.Sprite):
 bag_group = pygame.sprite.Group()
 
 grass_bag_pic = "Graphics/bag.png"
-# flower_bag_pic =
+flower_bag_pic = "Graphics/bag.png"
 # tree_bag_pic =
 
 bag1 = Bag(4, grass_bag_pic, 5, 6, 'grass')
 bag_group.add(bag1)
+
+bag2 = Bag(2, flower_bag_pic, 10, 20, 'flowers')
+bag_group.add(bag2)

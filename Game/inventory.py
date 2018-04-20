@@ -7,7 +7,7 @@ class Grass(pygame.sprite.Sprite):
         super().__init__()
         self.image = (pygame.image.load('Graphics/grass.png'))
         self.points = 1
-        self.amount = 20
+        self.amount = 0
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
@@ -19,7 +19,7 @@ class Flowers(pygame.sprite.Sprite):
         super().__init__()
         self.image = (pygame.image.load('Graphics/flowers.png'))
         self.points = 2
-        self.amount = 10
+        self.amount = 0
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
@@ -30,7 +30,7 @@ class Tree(pygame.sprite.Sprite):
         super().__init__()
         self.image = (pygame.image.load('Graphics/tree.png'))
         self.points = 4
-        self.amount = 2
+        self.amount = 0
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x

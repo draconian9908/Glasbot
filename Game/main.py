@@ -144,6 +144,9 @@ def Exit():
     global isRunning
     isRunning = False
 
+def Instructions():
+    glob.Globals.scene = 'instructions'
+
 btnPlay = Menu.Button(text = "Play", rect = (0,0,300,60),
                                 bg = Color.Gray, fg = Color.White,
                                 bgr = Color.CornflowerBlue, tag = ("menu", None))
@@ -158,11 +161,37 @@ btnExit.Left = btnPlay.Left
 btnExit.Top = btnPlay.Top + btnExit.Height + 3
 btnExit.Command = Exit
 
+btnInst = Menu.Button(text = 'Instructions', rect = (0,0,300,60),
+                        bg = Color.Gray, fg = Color.White,
+                        bgr = Color.CornflowerBlue, tag = ("menu", None))
+btnInst.Left = btnPlay.Left
+btnInst.Top = btnExit.Top + btnInst.Height + 3
+btnInst.Command = Instructions
+
+btnPlay2 = Inst_screen.Button(text = "Play", rect = (0,0,300,60),
+                                bg = Color.Gray, fg = Color.White,
+                                bgr = Color.CornflowerBlue, tag = ("instructions", None))
+btnPlay2.Left = window_width/2 - btnPlay2.Width - 50
+btnPlay2.Top = window_height - btnPlay2.Height - 50
+btnPlay2.Command = Play
+
+btnExit2 = Inst_screen.Button(text = 'Exit', rect = (0,0,300,60),
+                        bg = Color.Gray, fg = Color.White,
+                        bgr = Color.CornflowerBlue, tag = ("instructions", None))
+btnExit2.Left = window_width/2 + 50
+btnExit2.Top = window_height - btnExit2.Height - 50
+btnExit2.Command = Exit
+
 menuTitle = Menu.Text(text = 'GLASBOT', color = Color.Black, font = Font.Large)
 
 menuTitle.Left, menuTitle.Top = window_width/2 - menuTitle.Width/2, 0
 
 logo = Menu.Image(bitmap = logo_img)
+
+instTitle = Inst_screen.Text(text = 'INSTRUCTIONS', color = Color.White, font = Font.Large)
+
+instTitle.Left, instTitle.Top = window_width/2 - instTitle.Width/2, 0
+
 
 isRunning = True
 #Variable that is consistent when the game is running
@@ -259,7 +288,7 @@ while isRunning:
                             tile1 = [x_west, y_west_east, tree_texture]
 
                 # Tile1 is reassigned to match the direction and item in hand
-
+                contain = False
                 # Sees if the position of the tile1 - want to place is in the tiles that can be
                 # placed over
                 for t in placeable_tiles:
@@ -278,6 +307,8 @@ while isRunning:
                     elif item =='tree':
                         tree.amount -= 1
                         player.points += tree.points
+                    else:
+                        None
 
                 elif item == 'hoe':
                     None
@@ -300,6 +331,14 @@ while isRunning:
                         btnSound.play()
                         btn.Rolling = False
                         break
+                for btn in Inst_screen.Button.All:
+                    if btn.Tag[0] == glob.Globals.scene and btn.Rolling:
+                        if btn.Command != None:
+                            btn.Command() #DO BUTTON EVENT
+                        btnSound.play()
+                        btn.Rolling = False
+                        break
+
 
     #RENDER SCENEelif glob.Globals.scene == 'menu':
 
@@ -321,6 +360,27 @@ while isRunning:
                 glob.Globals.camera_x -= deltatime * 100
 
 
+        for bag in bag_group:
+            if len(bag_group) > 0:
+                tile = bag.tile
+                terrain.blit(tile[0], (tile[1], tile[2]))
+            if bag.tile[1]/32 == round(player_x):
+                if bag.tile[2]/32 == round(player_y):
+                    if bag.type == 'grass':
+                        grass.amount += bag.contents
+                    elif bag.type == 'flowers':
+                        flower.amount += bag.contents
+                    elif bag.type == 'tree':
+                        tree.amount += bag.contents
+                    bag_group.remove(bag)
+                    for t in tile_data:
+                        if t[0] == bag.tile[1] and t[1] == bag.tile[2]:
+                            terrain.blit(Tiles.texture_tags[t[2]], (t[0], t[1]))
+                            print(t)
+                else:
+                    None
+
+
         player_x = (window_width/2 - player_w/2 - glob.Globals.camera_x) / Tiles.size
         player_y = (window_height/2 - player_h/2 - glob.Globals.camera_y) / Tiles.size
 
@@ -332,6 +392,9 @@ while isRunning:
 
         player.render(window, (window_width/2 - player_w/2, window_height/2 - player_h/2))
 
+        # if len(bag_group) > 0:
+        #     tile = bag.tile
+        #     terrain.blit(tile[0], (tile[1], tile[2]))
 
         text = fps_font.render("Score: %s" % player.points, 1, (255, 255, 255))
         textpos = text.get_rect(centerx= 200, centery = 50)
@@ -377,10 +440,6 @@ while isRunning:
         elif item == 'hoe':
             window.blit(pygame.image.load("Graphics/border.png"), (hoe.rect.x, hoe.rect.y))
 
-        for bag in bag_group:
-            tile = bag.tile
-            terrain.blit(tile[0], (tile[1], tile[2]))
-
 
         #PROCESS MENU
     elif glob.Globals.scene == 'menu':
@@ -395,6 +454,44 @@ while isRunning:
         for btn in Menu.Button.All:
             if btn.Tag[0] == "menu":
                 btn.Render(window)
+
+        intext = amount_font.render("Collect seeds from bags hidden arount the map and plant them on dirt", 1, (255,255,255))
+        inpos = intext.get_rect(centerx = 400, centery = 520)
+        window.blit(intext, inpos)
+
+    elif glob.Globals.scene == 'instructions':
+
+        window.fill(Color.Fog)
+
+        for btn in Inst_screen.Button.All:
+            if btn.Tag[0] == "instructions":
+                btn.Render(window)
+
+        instTitle.Render(window)
+
+        one = Inst_screen.Text(text = '1.) Move your player with the w-a-s-d keys, select the item in your inventory with the corresponding 1-4 value ', color = Color.White, font = Font.Small)
+        one.Left, one.Top = 0, 100
+        one.Render(window)
+
+        two = Inst_screen.Text(text = '2.) Use the item in hand by pressing the space bar next to the tile you want ', color = Color.White, font = Font.Small)
+        two.Left, two.Top = 0, 120
+        two.Render(window)
+
+        three = Inst_screen.Text(text = '3.) Fight your enemies using the hoe and hitting them (space) until they die without letting them hit you', color = Color.White, font = Font.Small)
+        three.Left, three.Top = 0, 140
+        three.Render(window)
+
+        four = Inst_screen.Text(text = '4.) Plant seeds on dirt tiles (space) to bring Earth back to life', color = Color.White, font = Font.Small)
+        four.Left, four.Top = 0, 160
+        four.Render(window)
+
+        five = Inst_screen.Text(text = '- Grass is worth 1 point, flowers are worth 2, and trees are worth 4', color = Color.White, font = Font.Small)
+        five.Left, five.Top = 20, 180
+        five.Render(window)
+
+        six = Inst_screen.Text(text = '5.) Collect more seeds by grabbing the bags scattered around the map', color = Color.White, font = Font.Small)
+        six.Left, six.Top = 0, 200
+        six.Render(window)
 
     show_fps()
     pygame.display.update()
