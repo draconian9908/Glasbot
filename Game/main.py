@@ -64,20 +64,10 @@ placeable_tiles = []
 
 # Making a list of tiles that can have tiles placed on top - right now set to grass, dirt, tree and flower
 for tile in tile_data:
-    # if grass
-    if tile[2] == '1':
-        placeable_tiles.append(tile)
     # if dirt
     if tile[2] == '4':
         placeable_tiles.append(tile)
-    # if flower
-    if tile[2] == '6':
-        placeable_tiles.append(tile)
-    # if tree
-    if tile[2] == '7':
-        placeable_tiles.append(tile)
 
-print(placeable_tiles)
 
 def show_fps():
 #Shows fps on the screen

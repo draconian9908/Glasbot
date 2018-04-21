@@ -121,6 +121,17 @@ while isRunning:
                 brush = '4'
             elif event.key == pygame.K_5:
                 brush = '5'
+            elif event.key == pygame.K_6:
+                brush = '6'
+            elif event.key == pygame.K_7:
+                brush = '7'
+            elif event.key == pygame.K_8:
+                brush = '8'
+            elif event.key == pygame.K_9:
+                brush = '9'
+            elif event.key == pygame.K_i:
+                num = input("tile: ")
+                brush = num
 
             #save map
             elif event.key == pygame.K_RETURN:
