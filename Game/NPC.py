@@ -1,6 +1,7 @@
 import pygame, random
 from Time import *
 from glob import Globals
+from Textures import Tiles
 
 pygame.init()
 
@@ -24,6 +25,8 @@ class NPC:
         self.timer.on_next = lambda: move_npc(self)
         self.timer.start()
 
+        self.last_location = [0, 0]
+
         #GET NPC FACES
         self.facing = 'npc_south'
         self.faces = get_faces(sprite)
@@ -36,13 +39,24 @@ class NPC:
         if self.walking:
             move_speed = 100 * Globals.deltatime
             if self.facing == 'npc_south':
-                self.y -= move_speed
-            elif self.facing == 'npc_north':
                 self.y += move_speed
+            elif self.facing == 'npc_north':
+                self.y -= move_speed
             elif self.facing == 'npc_east':
                 self.x -= move_speed
             elif self.facing == 'npc_west':
                 self.x += move_speed
+
+            #BLOCK TILE NPC IS STANDING ON
+            location = [round(self.x / Tiles.size), round(self.y / Tiles.size)]
+            if self.last_location in Tiles.blocked:
+                Tiles.blocked.remove(self.last_location)
+
+            if not location in Tiles.blocked:
+                Tiles.blocked.append(location)
+                self.last_location = location
+
+
         surface.blit(self.faces[self.facing], (self.x + Globals.camera_x, self.y + Globals.camera_y))
 
 class TestNPC(NPC):

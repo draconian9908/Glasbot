@@ -120,6 +120,7 @@ hoe = Hoe(432, 560)
 tile1 = [0,0,'5']
 
 test_npc = TestNPC(name = 'cookie', pos = (200, 300))
+test_npc2 = TestNPC(name = 'also cookie', pos = (300, 200))
 
 #INITIALIZE MUSIC
 #pygame.mixer.music.load('Music/title.wav')
@@ -388,6 +389,9 @@ while isRunning:
             npc.render(window)
 
         player.render(window, (window_width/2 - player_w/2, window_height/2 - player_h/2))
+
+        #for t in Tiles.blocked:
+        #    pygame.draw.rect(terrain, Color.Red, (t[0] * Tiles.size + glob.Globals.camera_x, t[1] * Tiles.size + glob.Globals.camera_y, Tiles.size, Tiles.size), 2)
 
         # if len(bag_group) > 0:
         #     tile = bag.tile

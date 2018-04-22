@@ -13,6 +13,7 @@ class Timer():
         if self.active:
             self.value += Globals.deltatime / self.interval
             if int(self.value) != int(self.last_int):
+                self.last_int = int(self.value)
                 if self.on_next != None:
                     self.on_next()
 
