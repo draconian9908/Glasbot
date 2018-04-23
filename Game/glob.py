@@ -5,3 +5,6 @@ class Globals:
     camera_move = 0
     scene = 'menu'
     deltatime = 0
+
+    dialog_open = False
+    active_dialog = None

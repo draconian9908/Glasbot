@@ -30,6 +30,11 @@ del logo_img_temp
 
 terrain = Map_engine.load_map("maps/demo_map")
 
+dialog_bkgr = pygame.image.load('Graphics/Text_Box.png')
+Dialog_Bkgr = pygame.Surface(dialog_bkgr.get_size(), pygame.HWSURFACE|pygame.SRCALPHA)
+Dialog_Bkgr.blit(dialog_bkgr, (0, 0))
+Dialog_Bkgr_width, Dialog_Bkgr_height = Dialog_Bkgr.get_size()
+del dialog_bkgr
 
 # Reads the map given and makes the data into lists so we can read it
 global tile_data
@@ -119,8 +124,25 @@ hoe = Hoe(432, 560)
 
 tile1 = [0,0,'5']
 
-test_npc = TestNPC(name = 'cookie', pos = (200, 300))
-test_npc2 = TestNPC(name = 'also cookie', pos = (300, 200))
+#test_dialog = Dialog(text = [('hello there', 'my name is jeff',), ('nice to meet you',), ('bye',)])
+#glob.Globals.active_dialog = test_dialog
+#test_npc = TestNPC(name = 'cookie', pos = (200, 300), dialog = Dialog(text = [('cookie',), ('i liek kooky',), ('GIVE ME COOKIE',)]), hostile = False, health = 100)
+#test_npc2 = TestNPC(name = 'also cookie', pos = (300, 200), dialog = Dialog(text = [('cookie',), ('i liek kooky',), ('GIVE ME COOKIE',)]), hostile = False, health = 100)
+
+enemy_test = Enemy1(name = 'enemy', pos = (250, 250))
+
+def move_enemy(npc):
+    if player_y > npc.y:
+        npc.facing = 'npc_south'
+    elif player_y < npc.y:
+        npc.facing = 'npc_north'
+
+    elif player.y == npc.y:
+        if player_x > npc.x:
+            npc.facing = 'npc_east'
+        elif player_x < npc.x:
+            npc.facing = 'npc_west'
+    npc.walking = True
 
 #INITIALIZE MUSIC
 #pygame.mixer.music.load('Music/title.wav')
@@ -201,19 +223,46 @@ while isRunning:
             isRunning = False
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_w:
+            if event.key == pygame.K_w and not glob.Globals.dialog_open:
                 glob.Globals.camera_move = 1
                 player.facing = item + 'north'
-            elif event.key == pygame.K_s:
+            elif event.key == pygame.K_s and not glob.Globals.dialog_open:
                 glob.Globals.camera_move = 2
                 player.facing = item + 'south'
-            elif event.key == pygame.K_a:
+            elif event.key == pygame.K_a and not glob.Globals.dialog_open:
                 glob.Globals.camera_move = 3
                 player.facing = item + 'east'
-            elif event.key == pygame.K_d:
+            elif event.key == pygame.K_d and not glob.Globals.dialog_open:
                 glob.Globals.camera_move = 4
                 player.facing = item + 'west'
 
+            if event.key == pygame.K_RETURN:
+                if glob.Globals.dialog_open:
+                    #handle next page of dialog
+                    if glob.Globals.active_dialog.page < len(glob.Globals.active_dialog.text) - 1:
+                        glob.Globals.active_dialog.page += 1
+                    else:
+                        glob.Globals.dialog_open = False
+                        glob.Globals.active_dialog.page = 0
+                        glob.Globals.active_dialog = None
+                        for npc in NPC.all_npc:
+                            if not npc.timer.active:
+                                npc.timer.start()
+
+                else:
+                    #IF DIALOG ISNT OPEN
+                    for npc in NPC.all_npc:
+                        #IF PLAYER IN SPEECH BOUNDS
+                        #PLAYER COORDINATES ARE BY TILE, NPC COORDINATES ARE BY PIXEL
+                        npc_x = npc.x / Tiles.size
+                        npc_y = npc.y / Tiles.size
+                        if player_x >= npc_x - 2 and player_x <= npc_x + 2 and player_y >= npc_y -2 and player_y <= npc_y + 2:
+                            #PLAYER IS NEXT TO NPC, NOW CHECKS IF THEY ARE FACING THEM
+                            #if player.facing == 'north' and npc_y < player_y:
+                            glob.Globals.dialog_open = True
+                            glob.Globals.active_dialog = npc.dialog
+                            npc.timer.pause()
+                            npc.walking = False
             elif event.key == pygame.K_ESCAPE:
                 isRunning = False
 
@@ -242,7 +291,24 @@ while isRunning:
                 flower_texture = '6'
                 tree_texture = '7'
 
+                #NPC LOCATION
+                #npc_x = npc.x / Tiles.size
+                #npc_y = npc.y / Tiles.size
+
                 # Sees which item is in hand and then makes sure there are seeds to place
+                if item == 'hoe':
+                    for npc in NPC.enemy_npcs:
+                        if player_x >= npc_x - 4 and player_x <= npc_x + 4 and player_y >= npc_y -4 and player_y <= npc_y + 4:
+                            npc.health -= 25
+                            if player.facing == 'npc_south':
+                                npc.y -= 5
+                            elif player.facing == 'npc_north':
+                                npc.y += 5
+                            elif player.facing == 'npc_east':
+                                npc.x -= 5
+                            elif player.facing == 'npc-west':
+                                npc.x += 5
+
                 if item == 'grass':
                     if grass.amount == 0:
                         # if inventory is empty does not allow to place
@@ -281,6 +347,7 @@ while isRunning:
                             tile1 = [x_west, y_west_east, tree_texture]
                         elif player.facing == 'treeeast':
                             tile1 = [x_west, y_west_east, tree_texture]
+
 
                 # Tile1 is reassigned to match the direction and item in hand
                 contain = False
@@ -379,6 +446,8 @@ while isRunning:
         player_x = (window_width/2 - player_w/2 - glob.Globals.camera_x) / Tiles.size
         player_y = (window_height/2 - player_h/2 - glob.Globals.camera_y) / Tiles.size
 
+
+
         #RENDER GRAPHICS
 
         window.blit(Sky, (0,0))
@@ -388,7 +457,35 @@ while isRunning:
         for npc in NPC.all_npc:
             npc.render(window)
 
+        for npc in NPC.enemy_npcs:
+            npc_x = npc.x / Tiles.size
+            npc_y = npc.y / Tiles.size
+            if player_x >= npc_x - 1 and player_x <= npc_x + 1 and player_y >= npc_y -1 and player_y <= npc_y + 1:
+                player.health -= 1
+                if npc.facing == 'npc_south':
+                    glob.Globals.camera_y -= 2
+                elif npc.facing == 'npc_north':
+                    glob.Globals.camera_y += 2
+                elif npc.facing == 'npc_east':
+                    glob.Globals.camera_x -= 2
+                elif npc.facing == 'npc-west':
+                    glob.Globals.camera_x += 2
+            npc.render(window)
+            if npc.health <= 0:
+                npc.x = -1000
+                npc.y = -1000
+                npc.timer.pause()
+
         player.render(window, (window_width/2 - player_w/2, window_height/2 - player_h/2))
+
+        if glob.Globals.dialog_open:
+            window.blit(Dialog_Bkgr, (window_width /2 - Dialog_Bkgr_width /2, window_height - Dialog_Bkgr_height -2))
+
+            #DRAW DIALOG TEXT
+            if glob.Globals.active_dialog != None:
+                lines = glob.Globals.active_dialog.text[Globals.active_dialog.page]
+                for line in lines:
+                    window.blit(Font.Default.render(line, True, Color.White), (130, (window_height - Dialog_Bkgr_height) + 5 + (lines.index(line) * 25)))
 
         #for t in Tiles.blocked:
         #    pygame.draw.rect(terrain, Color.Red, (t[0] * Tiles.size + glob.Globals.camera_x, t[1] * Tiles.size + glob.Globals.camera_y, Tiles.size, Tiles.size), 2)

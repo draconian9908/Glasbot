@@ -1,7 +1,9 @@
-import pygame, random
+import pygame, random, math
 from Time import *
 from glob import Globals
 from Textures import Tiles
+
+
 
 pygame.init()
 
@@ -9,15 +11,38 @@ def move_npc(npc):
     npc.facing = random.choice(('npc_south', 'npc_north', 'npc_east', 'npc_west'))
     npc.walking = random.choice((True, False))
 
+
+def move_enemy(npc): #BROKEN
+    if math.sqrt((player_x - npc.x)**2 + (player_y - npc.y)**2) <= 500:
+        if player_y > npc.y:
+            npc.facing = 'npc_south'
+        elif player_y < npc.y:
+            npc.facing = 'npc_north'
+        elif player.y == npc.y:
+            if player_x > npc.x:
+                npc.facing = 'npc_east'
+            elif player_x < npc.x:
+                npc.facing = 'npc_west'
+
+        npc.walking = True
+
+
+class Dialog:
+    def __init__(self, text):
+        self.page = 0
+        self.text = text #[('blah blah blah', 'blahblah blah'), ('blah blah')]
+
+
 class NPC:
 
     all_npc = []
+    enemy_npcs = []
 
-    def __init__(self, name, pos, dialog, sprite):
+    def __init__(self, name, pos, dialog, sprite, hostile, health):
         self.name = name
         self.x = pos[0]
         self.y = pos[1]
-        self.dialogue = dialog
+        self.dialog = dialog
         self.width = sprite.get_width()
         self.height = sprite.get_height()
         self.walking = False
@@ -27,17 +52,20 @@ class NPC:
 
         self.last_location = [0, 0]
 
+        self.hostile = hostile
+        self.health = health
+
         #GET NPC FACES
         self.facing = 'npc_south'
         self.faces = get_faces(sprite)
 
         #PUBLISH
-        NPC.all_npc.append(self)
+        #NPC.all_npc.append(self)
 
     def render(self, surface):
         self.timer.update()
         if self.walking:
-            move_speed = 100 * Globals.deltatime
+            move_speed = 75 * Globals.deltatime
             if self.facing == 'npc_south':
                 self.y += move_speed
             elif self.facing == 'npc_north':
@@ -61,8 +89,16 @@ class NPC:
 
 class TestNPC(NPC):
 
-    def __init__(self, name, pos, dialog = None):
-        super().__init__(name, pos, dialog, pygame.image.load("Graphics/cookie.png"))
+    def __init__(self, name, pos, hostile, health, dialog = None):
+        super().__init__(name, pos, dialog, pygame.image.load("Graphics/cookie.png"), hostile, health)
+        NPC.all_npc.append(self)
+
+class Enemy1(NPC):
+    def __init__(self, name, pos, dialog = None, hostile = True, health = 100):
+        super().__init__(name, pos, dialog, pygame.image.load("Graphics/cookie.png"), hostile, health)
+        self.timer.on_next = lambda: move_npc(self)
+        NPC.enemy_npcs.append(self)
+
 
 
 
