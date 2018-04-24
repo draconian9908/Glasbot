@@ -110,10 +110,10 @@ def count_fps():
 #Calls the function to make the window
 create_window()
 
-player = Player("player")
+player = Player("player", window_width, window_height)
 player_w, player_h = player.width, player.height
-player_x = round(window_width/2 - player_w/2 - glob.Globals.camera_x) / Tiles.size
-player_y = round(window_height/2 - player_h/2 - glob.Globals.camera_y) / Tiles.size
+player_x = player.x
+player_y = player.y
 
 
 
@@ -130,7 +130,7 @@ tile1 = [0,0,'5']
 #test_npc = TestNPC(name = 'cookie', pos = (200, 300), dialog = Dialog(text = [('cookie',), ('i liek kooky',), ('GIVE ME COOKIE',)]), hostile = False, health = 100)
 #test_npc2 = TestNPC(name = 'also cookie', pos = (300, 200), dialog = Dialog(text = [('cookie',), ('i liek kooky',), ('GIVE ME COOKIE',)]), hostile = False, health = 100)
 
-enemy_test = Enemy1(name = 'enemy', pos = (250, 250))
+enemy_test = Enemy1(name = 'enemy', pos = (500, 100), target = player)
 
 #INITIALIZE MUSIC
 #pygame.mixer.music.load('Music/title.wav')
@@ -443,7 +443,8 @@ while isRunning:
 
         player_x = (window_width/2 - player_w/2 - glob.Globals.camera_x) / Tiles.size
         player_y = (window_height/2 - player_h/2 - glob.Globals.camera_y) / Tiles.size
-
+        player.x = player_x
+        player.y = player_y
 
 
         #RENDER GRAPHICS
