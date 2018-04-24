@@ -129,22 +129,22 @@ def get_faces(sprite):
     tile_size = (int(size[0]), int(size[1]))
 
     #for NPC
-    npc_south = pygame.image.load("Graphics/NPC/npc_test_south.png")
+    npc_south = pygame.image.load("Graphics/NPC/eyefront.png")
     south = pygame.Surface(tile_size, pygame.HWSURFACE|pygame.SRCALPHA)
     south.blit(npc_south, (0,0), (0,0,tile_size[0],tile_size[1]))
     faces["npc_south"] = south
 
-    npc_north = pygame.image.load("Graphics/NPC/npc_test_north.png")
+    npc_north = pygame.image.load("Graphics/NPC/eyeback.png")
     north = pygame.Surface(tile_size, pygame.HWSURFACE|pygame.SRCALPHA)
     north.blit(npc_north, (0,0), (0,0,tile_size[0],tile_size[1]))
     faces["npc_north"] = north
 
-    npc_east = pygame.image.load("Graphics/NPC/npc_test_east.png")
+    npc_east = pygame.image.load("Graphics/NPC/eyeright.png")
     east = pygame.Surface(tile_size, pygame.HWSURFACE|pygame.SRCALPHA)
     east.blit(npc_east, (0,0), (0,0,tile_size[0],tile_size[1]))
     faces["npc_east"] = east
 
-    npc_west = pygame.image.load("Graphics/NPC/npc_test_west.png")
+    npc_west = pygame.image.load("Graphics/NPC/eyeleft.png")
     west = pygame.Surface(tile_size, pygame.HWSURFACE|pygame.SRCALPHA)
     west.blit(npc_west, (0,0), (0,0,tile_size[0],tile_size[1]))
     faces["npc_west"] = west
