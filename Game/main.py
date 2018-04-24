@@ -131,24 +131,14 @@ tile1 = [0,0,'5']
 
 enemy_test = Enemy1(name = 'enemy', pos = (250, 250))
 
-def move_enemy(npc):
-    if player_y > npc.y:
-        npc.facing = 'npc_south'
-    elif player_y < npc.y:
-        npc.facing = 'npc_north'
-
-    elif player.y == npc.y:
-        if player_x > npc.x:
-            npc.facing = 'npc_east'
-        elif player_x < npc.x:
-            npc.facing = 'npc_west'
-    npc.walking = True
-
 #INITIALIZE MUSIC
 #pygame.mixer.music.load('Music/title.wav')
 #pygame.mixer.music.play(-1)
 #INITIALIZE SOUNDS
 btnSound = pygame.mixer.Sound('Sounds/btnClick.wav')
+enemy_hit_sound = pygame.mixer.Sound('Sounds/enemy_hit.wav')
+planting_sound = pygame.mixer.Sound('Sounds/planting.wav')
+failed_planting_sound = pygame.mixer.Sound('Sounds/failed_planting.wav')
 
 
 #INITIALIZE GUI
@@ -299,6 +289,7 @@ while isRunning:
                 if item == 'hoe':
                     for npc in NPC.enemy_npcs:
                         if player_x >= npc_x - 4 and player_x <= npc_x + 4 and player_y >= npc_y -4 and player_y <= npc_y + 4:
+                            enemy_hit_sound.play()
                             npc.health -= 25
                             if player.facing == 'npc_south':
                                 npc.y -= 5
@@ -357,6 +348,7 @@ while isRunning:
                     if t[0] == tile1[0] and t[1] == tile1[1]:
                         contain = True
                 if contain:
+                    planting_sound.play()
                     # if it is a tile that can be placed over - place the tile
                     terrain.blit(Tiles.texture_tags[tile1[2]],(tile1[0], tile1[1]))
                     # update the score and contents of inventory based on action and item
@@ -371,7 +363,8 @@ while isRunning:
                         player.points += tree.points
                     else:
                         None
-
+                elif not contain and item != 'hoe' or 'None':
+                    failed_planting_sound.play()
                 elif item == 'hoe':
                     None
                 elif item == 'None':

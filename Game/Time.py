@@ -1,4 +1,5 @@
 from glob import Globals
+from player import *
 
 class Timer():
 

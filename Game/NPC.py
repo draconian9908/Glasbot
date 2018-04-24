@@ -1,7 +1,10 @@
 import pygame, random, math
 from Time import *
 from glob import Globals
-from Textures import Tiles
+from Textures import *
+from player import *
+from main import player_x, player_y
+
 
 
 
@@ -13,6 +16,7 @@ def move_npc(npc):
 
 
 def move_enemy(npc): #BROKEN
+
     if math.sqrt((player_x - npc.x)**2 + (player_y - npc.y)**2) <= 500:
         if player_y > npc.y:
             npc.facing = 'npc_south'
@@ -23,7 +27,6 @@ def move_enemy(npc): #BROKEN
                 npc.facing = 'npc_east'
             elif player_x < npc.x:
                 npc.facing = 'npc_west'
-
         npc.walking = True
 
 
@@ -96,7 +99,7 @@ class TestNPC(NPC):
 class Enemy1(NPC):
     def __init__(self, name, pos, dialog = None, hostile = True, health = 100):
         super().__init__(name, pos, dialog, pygame.image.load("Graphics/cookie.png"), hostile, health)
-        self.timer.on_next = lambda: move_npc(self)
+        self.timer.on_next = lambda: move_enemy(self)
         NPC.enemy_npcs.append(self)
 
 
