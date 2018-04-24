@@ -2,8 +2,8 @@ import pygame, random, math
 from Time import *
 from glob import Globals
 from Textures import *
-from player import *
-from main import player_x, player_y
+#from player import *
+#from main import player_x, player_y
 
 
 
@@ -99,7 +99,8 @@ class TestNPC(NPC):
 class Enemy1(NPC):
     def __init__(self, name, pos, dialog = None, hostile = True, health = 100):
         super().__init__(name, pos, dialog, pygame.image.load("Graphics/cookie.png"), hostile, health)
-        self.timer.on_next = lambda: move_enemy(self)
+        #self.timer.on_next = lambda: move_npc(self)
+        #change to a move_enemy thing
         NPC.enemy_npcs.append(self)
 
 

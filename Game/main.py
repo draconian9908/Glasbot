@@ -66,6 +66,7 @@ for tile in tiles:
 tile_data = tiles
 
 placeable_tiles = []
+placed_tiles = []
 
 # Making a list of tiles that can have tiles placed on top - right now set to grass, dirt, tree and flower
 for tile in tile_data:
@@ -347,11 +348,15 @@ while isRunning:
                 for t in placeable_tiles:
                     if t[0] == tile1[0] and t[1] == tile1[1]:
                         contain = True
+                for t in placed_tiles:
+                    if t[0] == tile1[0] and t[1] == tile1[1]:
+                        contain = False
                 if contain:
                     planting_sound.play()
                     # if it is a tile that can be placed over - place the tile
                     terrain.blit(Tiles.texture_tags[tile1[2]],(tile1[0], tile1[1]))
                     # update the score and contents of inventory based on action and item
+                    placed_tiles.append(tile1)
                     if item == 'grass':
                         grass.amount -= 1
                         player.points += grass.points
@@ -461,7 +466,7 @@ while isRunning:
                     glob.Globals.camera_y += 2
                 elif npc.facing == 'npc_east':
                     glob.Globals.camera_x -= 2
-                elif npc.facing == 'npc-west':
+                elif npc.facing == 'npc_west':
                     glob.Globals.camera_x += 2
             npc.render(window)
             if npc.health <= 0:
