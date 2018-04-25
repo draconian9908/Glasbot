@@ -147,6 +147,11 @@ def Play():
     glob.Globals.scene = 'game'
     pygame.mixer.music.load('Music/Abyss(1).wav')
     pygame.mixer.music.play(-1)
+    # player.health = 100
+    # enemy_test.x = 500
+    # enemy_test.y = 100
+    # Need to find way to reset map!!!!
+    # player.score = 0
 
 def Exit():
     global isRunning
@@ -154,6 +159,9 @@ def Exit():
 
 def Instructions():
     glob.Globals.scene = 'instructions'
+
+def Game_over():
+    glob.Globals.scene = 'gameover'
 
 btnPlay = Menu.Button(text = "Play", rect = (0,0,300,60),
                                 bg = Color.Gray, fg = Color.White,
@@ -190,6 +198,20 @@ btnExit2.Left = window_width/2 + 50
 btnExit2.Top = window_height - btnExit2.Height - 50
 btnExit2.Command = Exit
 
+# btnPlay3 = Gameover.Button(text = "Play Again", rect = (0,0,300,60),
+#                                 bg = Color.Gray, fg = Color.White,
+#                                 bgr = Color.CornflowerBlue, tag = ("gameover", None))
+# btnPlay3.Left = window_width /2 - btnPlay.Width/2
+# btnPlay3.Top = window_height/2 - btnPlay.Height/2
+# btnPlay3.Command = Play
+
+btnExit3 = Gameover.Button(text = 'Exit', rect = (0,0,300,60),
+                        bg = Color.Gray, fg = Color.White,
+                        bgr = Color.CornflowerBlue, tag = ("gameover", None))
+btnExit3.Left = btnPlay.Left
+btnExit3.Top = btnPlay.Top + btnExit.Height + 3
+btnExit3.Command = Exit
+
 menuTitle = Menu.Text(text = 'GLASBOT', color = Color.Black, font = Font.Large)
 
 menuTitle.Left, menuTitle.Top = window_width/2 - menuTitle.Width/2, 0
@@ -200,6 +222,9 @@ instTitle = Inst_screen.Text(text = 'INSTRUCTIONS', color = Color.White, font = 
 
 instTitle.Left, instTitle.Top = window_width/2 - instTitle.Width/2, 0
 
+goverTitle = Gameover.Text(text = 'GAME OVER', color = Color.Red, font = Font.Large)
+
+goverTitle.Left, goverTitle.Top = window_width/2 - goverTitle.Width/2, 200
 
 isRunning = True
 #Variable that is consistent when the game is running
@@ -398,13 +423,20 @@ while isRunning:
                         btnSound.play()
                         btn.Rolling = False
                         break
+                for btn in Gameover.Button.All:
+                    if btn.Tag[0] == glob.Globals.scene and btn.Rolling:
+                        if btn.Command != None:
+                            btn.Command() #DO BUTTON EVENT
+                        btnSound.play()
+                        btn.Rolling = False
+                        break
 
 
     #RENDER SCENEelif glob.Globals.scene == 'menu':
 
     if glob.Globals.scene == 'game':
-
     #LOGIC
+
 
         if glob.Globals.camera_move == 1:
             if not Tiles.blocked_at((round(player_x),math.floor(player_y))):
@@ -448,7 +480,7 @@ while isRunning:
 
 
         if player.health <= 0:
-            isRunning = False
+            glob.Globals.scene = 'gameover'
         #RENDER GRAPHICS
 
         window.blit(Sky, (0,0))
@@ -588,6 +620,17 @@ while isRunning:
         six = Inst_screen.Text(text = '5.) Collect more seeds by grabbing the bags scattered around the map', color = Color.White, font = Font.Small)
         six.Left, six.Top = 0, 200
         six.Render(window)
+
+    elif glob.Globals.scene == 'gameover':
+
+        window.fill(Color.Fog)
+
+        goverTitle.Render(window)
+
+        for btn in Gameover.Button.All:
+            if btn.Tag[0] == "gameover":
+                btn.Render(window)
+
 
     show_fps()
     pygame.display.update()
