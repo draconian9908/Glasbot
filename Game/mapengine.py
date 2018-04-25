@@ -44,5 +44,7 @@ class Map_engine:
 
             if tile[1] in Tiles.blocked_types:
                 Tiles.blocked.append(tile[0])
+                Tiles.blockedNPC.append(tile[0])
+
 
         return terrain

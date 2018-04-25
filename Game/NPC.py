@@ -83,17 +83,22 @@ class NPC:
 
     def render(self, surface):
         self.timer.update()
+        x = self.x/Tiles.size
+        y = self.y/Tiles.size
         if self.walking:
             move_speed = 75 * Globals.deltatime
             if self.facing == 'npc_south':
-                self.y += move_speed
+                if not Tiles.blocked_at_NPC((round(x),math.floor(y)+1)):
+                    self.y += move_speed
             elif self.facing == 'npc_north':
-                self.y -= move_speed
+                if not Tiles.blocked_at_NPC((round(x),math.ceil(y)-1)):
+                    self.y -= move_speed
             elif self.facing == 'npc_west':
-                self.x -= move_speed
+                if not Tiles.blocked_at_NPC((math.floor(x)-1,round(y))):
+                    self.x -= move_speed
             elif self.facing == 'npc_east':
-                self.x += move_speed
-
+                if not Tiles.blocked_at_NPC((math.floor(x)+1,round(y))):
+                    self.x += move_speed
             #BLOCK TILE NPC IS STANDING ON
             location = [round(self.x / Tiles.size), round(self.y / Tiles.size)]
             if self.last_location in Tiles.blocked:

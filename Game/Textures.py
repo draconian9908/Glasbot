@@ -8,10 +8,18 @@ class Tiles:
 
     blocked = []
 
+    blockedNPC = []
+
     blocked_types = ["3", '9','30','31','32','33','34','35','36','37','38']
 
     def blocked_at(pos):
         if list(pos) in Tiles.blocked:
+            return True
+        else:
+            return False
+
+    def blocked_at_NPC(pos):
+        if list(pos) in Tiles.blockedNPC:
             return True
         else:
             return False

@@ -447,6 +447,8 @@ while isRunning:
         player.y = player_y
 
 
+        if player.health <= 0:
+            isRunning = False
         #RENDER GRAPHICS
 
         window.blit(Sky, (0,0))
