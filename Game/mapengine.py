@@ -29,7 +29,9 @@ class Map_engine:
         for tile in tiles:
             tile[0] = tile[0].split(",") # Split pos into list
             pos = tile[0]
+            #print(pos)
             for p in pos:
+                #print(p)
                 pos[pos.index(p)] = int(p) #convert to integer
 
             tiles[tiles.index(tile)] = (pos, tile[1]) #save to tile list
