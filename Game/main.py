@@ -28,7 +28,7 @@ logo_img.blit(logo_img_temp, (0, 0))
 del logo_img_temp
 
 
-terrain = Map_engine.load_map("maps/demo_map")
+terrain = Map_engine.load_map("maps/testmap")
 
 dialog_bkgr = pygame.image.load('Graphics/Text_Box.png')
 Dialog_Bkgr = pygame.Surface(dialog_bkgr.get_size(), pygame.HWSURFACE|pygame.SRCALPHA)
@@ -38,10 +38,11 @@ del dialog_bkgr
 
 # Reads the map given and makes the data into lists so we can read it
 global tile_data
-with open('maps/demo_map', "r") as mapfile:
+with open('maps/testmap', "r") as mapfile:
     map_data = mapfile.read()
 
 map_data = map_data.split('-')
+print(map_data)
 
 map_size = map_data[len(map_data)-1]
 map_data.remove(map_size)
@@ -58,7 +59,9 @@ for tile in range(len(map_data)):
 for tile in tiles:
     tile[0] = tile[0].split(",")
     pos = tile[0]
+    print(tile)
     for p in pos:
+        print(p)
         pos[pos.index(p)] = int(p)
 
     tiles[tiles.index(tile)] = [pos[0] * Tiles.size, pos[1] * Tiles.size, tile[1]]
@@ -313,18 +316,42 @@ while isRunning:
 
                 # Sees which item is in hand and then makes sure there are seeds to place
                 if item == 'hoe':
+                    print(player.facing)
+                    print(npc.health)
+                    hit = False
                     for npc in NPC.enemy_npcs:
                         if player_x >= npc_x - 4 and player_x <= npc_x + 4 and player_y >= npc_y -4 and player_y <= npc_y + 4:
-                            enemy_hit_sound.play()
-                            npc.health -= 25
-                            if player.facing == 'npc_south':
-                                npc.y -= 5
-                            elif player.facing == 'npc_north':
-                                npc.y += 5
-                            elif player.facing == 'npc_east':
-                                npc.x -= 5
-                            elif player.facing == 'npc-west':
-                                npc.x += 5
+                            if round(player.y) > round(npc.y / Tiles.size):
+                                if player.facing == 'hoenorth':
+                                    enemy_hit_sound.play()
+                                    npc.health -= 25
+                                    hit = True
+                            elif round(player.y) < round(npc.y / Tiles.size):
+                                if player.facing == 'hoesouth':
+                                    enemy_hit_sound.play()
+                                    npc.health -= 25
+                                    hit = True
+                            elif round(player.x) > round(npc.x / Tiles.size):
+                                if player.facing == 'hoeeast':
+                                    enemy_hit_sound.play()
+                                    npc.health -= 25
+                                    hit = True
+                            elif round(player.x) < round(npc.x / Tiles.size):
+                                if player.facing == 'hoewest':
+                                    enemy_hit_sound.play()
+                                    npc.health -= 25
+                                    hit = True
+                            # enemy_hit_sound.play()
+                            # npc.health -= 25
+                            if hit == True:
+                                if enemy_test.facing == 'npc_south':
+                                    enemy_test.y -= 40
+                                elif enemy_test.facing == 'npc_north':
+                                    enemy_test.y += 40
+                                elif enemy_test.facing == 'npc_east':
+                                    enemy_test.x -= 40
+                                elif enemy_test.facing == 'npc-west':
+                                    enemy_test.x += 40
 
                 if item == 'grass':
                     if grass.amount == 0:
@@ -395,8 +422,6 @@ while isRunning:
                         None
                 elif not contain and item != 'hoe' or 'None':
                     failed_planting_sound.play()
-                elif item == 'hoe':
-                    None
                 elif item == 'None':
                     None
                 print(player.facing)

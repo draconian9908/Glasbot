@@ -3,6 +3,7 @@ from Time import *
 from glob import Globals
 from Textures import *
 from player import *
+import math
 
 
 
@@ -28,16 +29,16 @@ def move_enemy(npc, player): #BROKEN
             print(round(player.y), round(npc.y / Tiles.size))
             npc.facing = 'npc_north'
 
-        elif round(player.y) == round(npc.y / Tiles.size) + 1 or round(npc.y / Tiles.size) - 1:
-            if round(player.x) > round(npc.x / Tiles.size):
-                print(npc.facing)
-                print(round(player.x), round(npc.x / Tiles.size))
-                npc.facing = 'npc_east'
+        # elif round(player.y) == round(npc.y / Tiles.size) + 1 or round(npc.y / Tiles.size) - 1:
+        elif round(player.x) > round(npc.x / Tiles.size):
+            print(npc.facing)
+            print(round(player.x), round(npc.x / Tiles.size))
+            npc.facing = 'npc_east'
 
-            elif round(player.x) < round(npc.x / Tiles.size):
-                print(npc.facing)
-                print(round(player.x), round(npc.x / Tiles.size))
-                npc.facing = 'npc_west'
+        elif round(player.x) < round(npc.x / Tiles.size):
+            print(npc.facing)
+            print(round(player.x), round(npc.x / Tiles.size))
+            npc.facing = 'npc_west'
 
         npc.walking = True
     else:
