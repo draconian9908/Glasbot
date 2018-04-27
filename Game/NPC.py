@@ -54,7 +54,7 @@ class NPC:
         self.walking = False
         # Uses timers for the NPC and make movement at every step
         self.timer = Timer(1)
-        self.timer.on_next = lambda: move_enemy(self, target)
+        self.timer.on_next = None
         self.timer.start()
 
         # Get the last location of the NPC
@@ -118,10 +118,13 @@ class TestNPC(NPC):
 class Enemy1(NPC):
     def __init__(self, name, pos,  target, dialog = None, hostile = True, health = 4):
         super().__init__(name, pos, dialog, pygame.image.load("Graphics/cookie.png"), hostile, health, target)
-        #self.timer.on_next = lambda: move_enemy(self, target)
+        #sets NPC movement to that defined bt the move_enemy function
+        self.timer.on_next = lambda: move_enemy(self, target)
+        #appends NPC to enemy list
         NPC.enemy_npcs.append(self)
 
 def get_faces(sprite):
+    # decides which image is rendered based on direction
     faces = {}
 
     size = sprite.get_size()
