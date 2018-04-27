@@ -30,7 +30,7 @@ logo_img.blit(logo_img_temp, (0, 0))
 del logo_img_temp
 
 # loads the map
-terrain = Map_engine.load_map("maps/testmap")
+terrain = Map_engine.load_map("maps/demo_map105")
 
 # Dialog background
 dialog_bkgr = pygame.image.load('Graphics/Text_Box.png')
@@ -42,7 +42,7 @@ del dialog_bkgr
 # Reads the map given and makes the data into lists so we can read it
 # same as code in the map engine
 global tile_data
-with open('maps/testmap', "r") as mapfile:
+with open('maps/demo_map105', "r") as mapfile:
     map_data = mapfile.read()
 
 map_data = map_data.split('-')
@@ -499,6 +499,7 @@ while isRunning:
                         flower.amount += bag.contents
                     elif bag.type == 'tree':
                         tree.amount += bag.contents
+                    bag_group.remove(bag)
                     for t in tile_data:
                         # places the tile that was there before on top of the bag to hide it
                         if t[0] == bag.tile[1] and t[1] == bag.tile[2]:
