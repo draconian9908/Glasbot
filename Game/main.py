@@ -12,24 +12,27 @@ from collectable import *
 
 pygame.init()
 
+# intializes fonts for the game
 pygame.font.init()
 fps_font = pygame.font.Font(None, 20)
 amount_font = pygame.font.Font(None, 20)
 
+# Makes the background behind the map
 sky = pygame.image.load("Graphics/sky.png")
 Sky = pygame.Surface(sky.get_size(), pygame.HWSURFACE)
 Sky.blit(sky, (0,0))
 del sky
 
+# Makes the logo features to load in the background
 logo_img_temp = pygame.image.load('Graphics/back.jpg')
-#logo_img_temp = pygame.transform.scale(logo_img_temp, (900, 420))
 logo_img = pygame.Surface(logo_img_temp.get_size(), pygame.HWSURFACE)
 logo_img.blit(logo_img_temp, (0, 0))
 del logo_img_temp
 
-
+# loads the map
 terrain = Map_engine.load_map("maps/testmap")
 
+# Dialog background
 dialog_bkgr = pygame.image.load('Graphics/Text_Box.png')
 Dialog_Bkgr = pygame.Surface(dialog_bkgr.get_size(), pygame.HWSURFACE|pygame.SRCALPHA)
 Dialog_Bkgr.blit(dialog_bkgr, (0, 0))
@@ -37,6 +40,7 @@ Dialog_Bkgr_width, Dialog_Bkgr_height = Dialog_Bkgr.get_size()
 del dialog_bkgr
 
 # Reads the map given and makes the data into lists so we can read it
+# same as code in the map engine
 global tile_data
 with open('maps/testmap', "r") as mapfile:
     map_data = mapfile.read()
@@ -71,7 +75,7 @@ tile_data = tiles
 placeable_tiles = []
 placed_tiles = []
 
-# Making a list of tiles that can have tiles placed on top - right now set to grass, dirt, tree and flower
+# Making a list of tiles that can have tiles placed on top
 for tile in tile_data:
     # if dirt
     if tile[2] == '4':
@@ -91,7 +95,6 @@ def create_window():
     window_width, window_height = 800, 600
     window_title = "Glasbot"
     #Makes the window width set to default as well as adds the title
-
     pygame.display.set_caption(window_title)
     window = pygame.display.set_mode((window_width, window_height), pygame.HWSURFACE|pygame.DOUBLEBUF)
     #Actually makes the window with the title
@@ -103,7 +106,6 @@ FPS = 0
 
 def count_fps():
 #Keeps track of the fps of the game
-
     global cSec, cFrame, FPS
 
     FPS = clock.get_fps()
@@ -113,59 +115,52 @@ def count_fps():
 #Calls the function to make the window
 create_window()
 
+# Makes a player and the position of the player
 player = Player("player", window_width, window_height)
 player_w, player_h = player.width, player.height
 player_x = player.x
 player_y = player.y
 
-
-
+# Creates the items for the inventory and selects the item in hand
 item = 'None'
 grass = Grass(336, 560)
 flower = Flowers(368, 560)
 tree = Tree(400, 560)
 hoe = Hoe(432, 560)
 
+# Makes a default tile1
 tile1 = [0,0,'5']
 
-#test_dialog = Dialog(text = [('hello there', 'my name is jeff',), ('nice to meet you',), ('bye',)])
-#glob.Globals.active_dialog = test_dialog
-#test_npc = TestNPC(name = 'cookie', pos = (200, 300), dialog = Dialog(text = [('cookie',), ('i liek kooky',), ('GIVE ME COOKIE',)]), hostile = False, health = 100)
-#test_npc2 = TestNPC(name = 'also cookie', pos = (300, 200), dialog = Dialog(text = [('cookie',), ('i liek kooky',), ('GIVE ME COOKIE',)]), hostile = False, health = 100)
-
+# makes an enemy
 enemy_test = Enemy1(name = 'enemy', pos = (500, 100), target = player)
 
-#INITIALIZE MUSIC
-#pygame.mixer.music.load('Music/title.wav')
-#pygame.mixer.music.play(-1)
 #INITIALIZE SOUNDS
 btnSound = pygame.mixer.Sound('Sounds/btnClick.wav')
 enemy_hit_sound = pygame.mixer.Sound('Sounds/enemy_hit.wav')
 planting_sound = pygame.mixer.Sound('Sounds/planting.wav')
 failed_planting_sound = pygame.mixer.Sound('Sounds/failed_planting.wav')
 
-
 #INITIALIZE GUI
 def Play():
+    # Sets the play command to change to the game
     glob.Globals.scene = 'game'
     pygame.mixer.music.load('Music/Abyss(1).wav')
     pygame.mixer.music.play(-1)
-    # player.health = 100
-    # enemy_test.x = 500
-    # enemy_test.y = 100
-    # Need to find way to reset map!!!!
-    # player.score = 0
 
 def Exit():
+    # sets the exit command to quit the game
     global isRunning
     isRunning = False
 
 def Instructions():
+    # Instructions command redirects to the instructions page
     glob.Globals.scene = 'instructions'
 
 def Game_over():
+    # Game over command redirects to a game over screen
     glob.Globals.scene = 'gameover'
 
+# Buttons for the main menu
 btnPlay = Menu.Button(text = "Play", rect = (0,0,300,60),
                                 bg = Color.Gray, fg = Color.White,
                                 bgr = Color.CornflowerBlue, tag = ("menu", None))
@@ -187,6 +182,7 @@ btnInst.Left = btnPlay.Left
 btnInst.Top = btnExit.Top + btnInst.Height + 3
 btnInst.Command = Instructions
 
+# Buttons for the instructions screen
 btnPlay2 = Inst_screen.Button(text = "Play", rect = (0,0,300,60),
                                 bg = Color.Gray, fg = Color.White,
                                 bgr = Color.CornflowerBlue, tag = ("instructions", None))
@@ -201,13 +197,7 @@ btnExit2.Left = window_width/2 + 50
 btnExit2.Top = window_height - btnExit2.Height - 50
 btnExit2.Command = Exit
 
-# btnPlay3 = Gameover.Button(text = "Play Again", rect = (0,0,300,60),
-#                                 bg = Color.Gray, fg = Color.White,
-#                                 bgr = Color.CornflowerBlue, tag = ("gameover", None))
-# btnPlay3.Left = window_width /2 - btnPlay.Width/2
-# btnPlay3.Top = window_height/2 - btnPlay.Height/2
-# btnPlay3.Command = Play
-
+# Buttons for the game over screen
 btnExit3 = Gameover.Button(text = 'Exit', rect = (0,0,300,60),
                         bg = Color.Gray, fg = Color.White,
                         bgr = Color.CornflowerBlue, tag = ("gameover", None))
@@ -215,18 +205,17 @@ btnExit3.Left = btnPlay.Left
 btnExit3.Top = btnPlay.Top + btnExit.Height + 3
 btnExit3.Command = Exit
 
+#Title for the menu page and background image
 menuTitle = Menu.Text(text = 'GLASBOT', color = Color.Black, font = Font.Large)
-
 menuTitle.Left, menuTitle.Top = window_width/2 - menuTitle.Width/2, 0
-
 logo = Menu.Image(bitmap = logo_img)
 
+# Title for the instructions page
 instTitle = Inst_screen.Text(text = 'INSTRUCTIONS', color = Color.White, font = Font.Large)
-
 instTitle.Left, instTitle.Top = window_width/2 - instTitle.Width/2, 0
 
+# Game over page title
 goverTitle = Gameover.Text(text = 'GAME OVER', color = Color.Red, font = Font.Large)
-
 goverTitle.Left, goverTitle.Top = window_width/2 - goverTitle.Width/2, 200
 
 isRunning = True
@@ -235,7 +224,6 @@ isRunning = True
 #Game loop created when the game is running
 while isRunning:
 
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
         #exits the game
@@ -243,8 +231,11 @@ while isRunning:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w and not glob.Globals.dialog_open:
+                # Sees which direction the player want to move and makes sure no dialog
                 glob.Globals.camera_move = 1
+                # Sets the camera movement to match this
                 player.facing = item + 'north'
+                # Updates the player direction based on the movement
             elif event.key == pygame.K_s and not glob.Globals.dialog_open:
                 glob.Globals.camera_move = 2
                 player.facing = item + 'south'
@@ -256,6 +247,7 @@ while isRunning:
                 player.facing = item + 'west'
 
             if event.key == pygame.K_RETURN:
+                # for dialog purposes - moving forward
                 if glob.Globals.dialog_open:
                     #handle next page of dialog
                     if glob.Globals.active_dialog.page < len(glob.Globals.active_dialog.text) - 1:
@@ -265,27 +257,44 @@ while isRunning:
                         glob.Globals.active_dialog.page = 0
                         glob.Globals.active_dialog = None
                         for npc in NPC.all_npc:
+                            # Updates the timer
                             if not npc.timer.active:
                                 npc.timer.start()
-
                 else:
-                    #IF DIALOG ISNT OPEN
+                    #if dialog isnt open
                     for npc in NPC.all_npc:
-                        #IF PLAYER IN SPEECH BOUNDS
-                        #PLAYER COORDINATES ARE BY TILE, NPC COORDINATES ARE BY PIXEL
+                        speaking = False
+                        #if player in speech bounds
+                        #makes npc coordinates match player coordinates - both by tile now
                         npc_x = npc.x / Tiles.size
                         npc_y = npc.y / Tiles.size
                         if player_x >= npc_x - 2 and player_x <= npc_x + 2 and player_y >= npc_y -2 and player_y <= npc_y + 2:
-                            #PLAYER IS NEXT TO NPC, NOW CHECKS IF THEY ARE FACING THEM
-                            #if player.facing == 'north' and npc_y < player_y:
+                            #PLAYER IS NEXT TO NPC (needs to check if they are facing them--)
+                            if round(player.y) >= round(npc.y / Tiles.size):
+                                # sees where the player is relative to the npc
+                                if player.facing == 'hoenorth' or 'flowernorth' or 'treenorth' or 'grassnorth':
+                                    # checks to make sure they are facing the npc
+                                    speaking = True #says they are speaking
+                            elif round(player.y) <= round(npc.y / Tiles.size):
+                                if player.facing == 'hoesouth' or 'flowersouth' or 'treesouth' or 'grasssouth':
+                                    speaking = True
+                            elif round(player.x) >= round(npc.x / Tiles.size):
+                                if player.facing == 'hoeeast' or 'flowereast' or 'treeeast' or 'grasseast':
+                                    speaking = True
+                            elif round(player.x) <= round(npc.x / Tiles.size):
+                                if player.facing == 'hoewest' or 'flowerwest' or 'treewest' or 'grasswest':
+                                    speaking = True
+                        if speaking == True:
+                            # opens the dialog if they are speaking
                             glob.Globals.dialog_open = True
                             glob.Globals.active_dialog = npc.dialog
                             npc.timer.pause()
                             npc.walking = False
             elif event.key == pygame.K_ESCAPE:
+                # exits the game
                 isRunning = False
-
             elif event.key == pygame.K_1:
+                # Updates the image in hand based on the key pressed for inventory
                 item = 'grass'
             elif event.key == pygame.K_2:
                 item = 'flowers'
@@ -293,7 +302,6 @@ while isRunning:
                 item = 'tree'
             elif event.key == pygame.K_4:
                 item = 'hoe'
-
             # plant
             elif event.key == pygame.K_SPACE:
                 # Placement directions
@@ -310,48 +318,47 @@ while isRunning:
                 flower_texture = '6'
                 tree_texture = '7'
 
-                #NPC LOCATION
-                #npc_x = npc.x / Tiles.size
-                #npc_y = npc.y / Tiles.size
-
                 # Sees which item is in hand and then makes sure there are seeds to place
                 if item == 'hoe':
-                    print(player.facing)
-                    print(npc.health)
                     hit = False
+                    # Checks to see if the NPC is hit
                     for npc in NPC.enemy_npcs:
                         if player_x >= npc_x - 4 and player_x <= npc_x + 4 and player_y >= npc_y -4 and player_y <= npc_y + 4:
+                            # Checks to see if player is close enough
                             if round(player.y) > round(npc.y / Tiles.size):
+                                # sees where the player is relative to the enemy
                                 if player.facing == 'hoenorth':
+                                    # checks to make sure they are facing the enemy
                                     enemy_hit_sound.play()
-                                    npc.health -= 25
+                                    npc.health -= hoe.damage
                                     hit = True
+                                    # says it has been hit, takes away the damage
                             elif round(player.y) < round(npc.y / Tiles.size):
                                 if player.facing == 'hoesouth':
                                     enemy_hit_sound.play()
-                                    npc.health -= 25
+                                    npc.health -= hoe.damage
                                     hit = True
                             elif round(player.x) > round(npc.x / Tiles.size):
                                 if player.facing == 'hoeeast':
                                     enemy_hit_sound.play()
-                                    npc.health -= 25
+                                    npc.health -= hoe.damage
                                     hit = True
                             elif round(player.x) < round(npc.x / Tiles.size):
                                 if player.facing == 'hoewest':
                                     enemy_hit_sound.play()
-                                    npc.health -= 25
+                                    npc.health -= hoe.damage
                                     hit = True
-                            # enemy_hit_sound.play()
-                            # npc.health -= 25
                             if hit == True:
-                                if enemy_test.facing == 'npc_south':
-                                    enemy_test.y -= 40
-                                elif enemy_test.facing == 'npc_north':
-                                    enemy_test.y += 40
-                                elif enemy_test.facing == 'npc_east':
-                                    enemy_test.x -= 40
-                                elif enemy_test.facing == 'npc-west':
-                                    enemy_test.x += 40
+                                # checks to see if the npc has been hit
+                                if npc.facing == 'npc_south':
+                                    # moves the npc back based on the direction it is facing
+                                    npc.y -= 40
+                                elif npc.facing == 'npc_north':
+                                    npc.y += 40
+                                elif npc.facing == 'npc_east':
+                                    npc.x -= 40
+                                elif npc.facing == 'npc_west':
+                                    npc.x += 40
 
                 if item == 'grass':
                     if grass.amount == 0:
@@ -360,6 +367,7 @@ while isRunning:
                     else:
                         # if it is in inventory base direction off of way facing and texture out of item
                         if player.facing == 'grasssouth':
+                            # makes the tile in the spot in front with the correct texture
                             tile1 = [x_south_north, y_south, grass_texture]
                         elif player.facing == 'grassnorth':
                             tile1 = [x_south_north, y_north, grass_texture]
@@ -421,15 +429,15 @@ while isRunning:
                     else:
                         None
                 elif not contain and item != 'hoe' or 'None':
+                    # makes a failed planting noise if no seeds
                     failed_planting_sound.play()
                 elif item == 'None':
                     None
-                print(player.facing)
 
                 contain = False
 
-
         elif event.type == pygame.KEYUP:
+            # stops movement when no keys pressed down
             glob.Globals.camera_move = 0
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -456,16 +464,14 @@ while isRunning:
                         btn.Rolling = False
                         break
 
-
-    #RENDER SCENEelif glob.Globals.scene == 'menu':
-
     if glob.Globals.scene == 'game':
     #LOGIC
-
-
         if glob.Globals.camera_move == 1:
+            # moves the camera based on the input
             if not Tiles.blocked_at((round(player_x),math.floor(player_y))):
+                # makes sure tile is not blocked
                 glob.Globals.camera_y += glob.Globals.deltatime * 100
+                # moves the camera over
         elif glob.Globals.camera_move == 2:
             if not Tiles.blocked_at((round(player_x),math.ceil(player_y))):
                 glob.Globals.camera_y -= glob.Globals.deltatime * 100
@@ -476,28 +482,32 @@ while isRunning:
             if not Tiles.blocked_at((math.ceil(player_x),round(player_y))):
                 glob.Globals.camera_x -= glob.Globals.deltatime * 100
 
-
         for bag in bag_group:
+            # cycles through all the bags
             if len(bag_group) > 0:
                 tile = bag.tile
+                # blits the bags onto the terrain
                 terrain.blit(tile[0], (tile[1], tile[2]))
             if bag.tile[1]/32 == round(player_x):
                 if bag.tile[2]/32 == round(player_y):
+                    # checks if the player is on top of the bag
                     if bag.type == 'grass':
+                        # checks what kind of bag
                         grass.amount += bag.contents
+                        # adds the seeds to the inventory
                     elif bag.type == 'flowers':
                         flower.amount += bag.contents
                     elif bag.type == 'tree':
                         tree.amount += bag.contents
-                    bag_group.remove(bag)
                     for t in tile_data:
+                        # places the tile that was there before on top of the bag to hide it
                         if t[0] == bag.tile[1] and t[1] == bag.tile[2]:
                             terrain.blit(Tiles.texture_tags[t[2]], (t[0], t[1]))
                             print(t)
                 else:
                     None
 
-
+        # updates the player position
         player_x = (window_width/2 - player_w/2 - glob.Globals.camera_x) / Tiles.size
         player_y = (window_height/2 - player_h/2 - glob.Globals.camera_y) / Tiles.size
         player.x = player_x
@@ -505,22 +515,29 @@ while isRunning:
 
 
         if player.health <= 0:
+            # if you run out of health
             glob.Globals.scene = 'gameover'
         #RENDER GRAPHICS
 
         window.blit(Sky, (0,0))
+        # blits the background
 
         window.blit(terrain,(glob.Globals.camera_x, glob.Globals.camera_y))
+        # blits the piece of terrain inside the camera view
 
         for npc in NPC.all_npc:
+            # blits all NPCs
             npc.render(window)
 
         for npc in NPC.enemy_npcs:
             npc_x = npc.x / Tiles.size
             npc_y = npc.y / Tiles.size
             if player_x >= npc_x - 1 and player_x <= npc_x + 1 and player_y >= npc_y -1 and player_y <= npc_y + 1:
+                # if the npc reaches the player
                 player.health -= 1
+                # hurts the player while in contact
                 if npc.facing == 'npc_south':
+                    # Moves the screen based on the direction of the enemy
                     glob.Globals.camera_y -= 2
                 elif npc.facing == 'npc_north':
                     glob.Globals.camera_y += 2
@@ -530,11 +547,13 @@ while isRunning:
                     glob.Globals.camera_x += 2
             npc.render(window)
             if npc.health <= 0:
+                # if the npc dies - exile him
                 npc.x = -1000
                 npc.y = -1000
                 npc.timer.pause()
 
         player.render(window, (window_width/2 - player_w/2, window_height/2 - player_h/2))
+        # renders the player
 
         if glob.Globals.dialog_open:
             window.blit(Dialog_Bkgr, (window_width /2 - Dialog_Bkgr_width /2, window_height - Dialog_Bkgr_height -2))
@@ -545,13 +564,7 @@ while isRunning:
                 for line in lines:
                     window.blit(Font.Default.render(line, True, Color.White), (130, (window_height - Dialog_Bkgr_height) + 5 + (lines.index(line) * 25)))
 
-        #for t in Tiles.blocked:
-        #    pygame.draw.rect(terrain, Color.Red, (t[0] * Tiles.size + glob.Globals.camera_x, t[1] * Tiles.size + glob.Globals.camera_y, Tiles.size, Tiles.size), 2)
-
-        # if len(bag_group) > 0:
-        #     tile = bag.tile
-        #     terrain.blit(tile[0], (tile[1], tile[2]))
-
+        # blits the score and health to the screen
         text = fps_font.render("Score: %s" % player.points, 1, (255, 255, 255))
         textpos = text.get_rect(centerx= 200, centery = 50)
         window.blit(text, textpos)
@@ -621,6 +634,7 @@ while isRunning:
                 btn.Render(window)
 
         instTitle.Render(window)
+        # the instructional text in the game
 
         one = Inst_screen.Text(text = '1.) Move your player with the w-a-s-d keys, select the item in your inventory with the corresponding 1-4 value ', color = Color.White, font = Font.Small)
         one.Left, one.Top = 0, 100
@@ -647,7 +661,7 @@ while isRunning:
         six.Render(window)
 
     elif glob.Globals.scene == 'gameover':
-
+        # the game over screen
         window.fill(Color.Fog)
 
         goverTitle.Render(window)

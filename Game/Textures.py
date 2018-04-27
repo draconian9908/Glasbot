@@ -2,32 +2,40 @@ import pygame
 
 pygame.init()
 
+# Creates a central location for the tile_size
 class Tiles:
 
+    # size of the tiles by pixels - square
     size = 32
 
+    # A list of blocked tiles for the player
     blocked = []
-
+    # A list of blocked tiles for the NPCs
     blockedNPC = []
 
+    # The types of tiles in the map which cannot be walked on
     blocked_types = ["3", '9','30','31','32','33','34','35','36','37','38']
 
     def blocked_at(pos):
+        # Checks if a tile is a blocked type for the player
         if list(pos) in Tiles.blocked:
             return True
         else:
             return False
 
     def blocked_at_NPC(pos):
+        # Checks if a tile is a blocked type for NPC
         if list(pos) in Tiles.blockedNPC:
             return True
         else:
             return False
 
     def load_texture(file, size):
+        # Loads the the texture of that tile
         bitmap = pygame.image.load(file)
         bitmap = pygame.transform.scale(bitmap, (size, size))
 
+        # blits the tile onto the surface and returns this surface
         surface = pygame.Surface((size, size), pygame.HWSURFACE|pygame.SRCALPHA)
         surface.blit(bitmap, (0,0))
 
@@ -87,6 +95,8 @@ class Tiles:
     woodtopright = load_texture('Graphics/woodtopright.png', size)
 
 
+    # dictionary of all the different textures with keys
+        #The files to blit the objects and the size are saved in each piece
     texture_tags = {"1": grass, "2":stone, "3": water, "4": dirt, '5':empty, '6':flowers, '7':tree, '8':wood, '9':black,
                     '10': rockwaterbottomleftturn, '11':rockwaterbottomrightturn, '12':rockwaterside, '13':rockwatersidedirtleft, '14':rockwatersidedirtright,
                     '15':rockwatertopleftturn, '16':rockwatertoprightturn, '17':rockwaterupdown, '18':rockwaterupdowndirtbottom, '19':rockwaterupdowndirttop,

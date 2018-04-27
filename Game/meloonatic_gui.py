@@ -11,74 +11,72 @@ pygame.init()
 
 
 def MouseOver(rect):
+    # Checks if the mouse is on the button
     mouse_pos = pygame.mouse.get_pos()
     if mouse_pos[0] > rect[0] and mouse_pos[0] < rect[0] + rect[2] and mouse_pos[1] > rect[1] and mouse_pos[1] < rect[1] + rect[3]:
         return True
     else:
         return False
 
-
-
-
-
 class Font:
-
+    # Fonts in the game
     Default = pygame.font.SysFont("Verdana", 20)
     Small = pygame.font.SysFont("Verdana", 15)
     Medium = pygame.font.SysFont("Verdana", 40)
     Large = pygame.font.SysFont("Verdana", 60)
     Scanner = pygame.font.SysFont("Verdana", 30)
 
-
-
-
 class Menu:
-
+    # Menu class
     class Button:
-
+        # class of buttons and list of all buttons
         All = []
 
         def __init__(self, text, rect, bg, fg, bgr, font = Font.Default, tag = ("menu", None)):
+            # Initialize the button
             self.Text = text
+            # Sets the size of the button and position
             self.Left = rect[0]
             self.Top = rect[1]
             self.Width = rect[2]
             self.Height = rect[3]
+            # Sets what the button does
             self.Command = None
             self.Rolling = False
             self.Tag = tag
 
-            # NORMAL BUTTON
+            # Normal button shown
             self.Normal = pygame.Surface((self.Width, self.Height), pygame.HWSURFACE|pygame.SRCALPHA)
             self.Normal.fill(bg)
             RText = font.render(text, True, fg)   # text, antialiasing, color
             txt_rect = RText.get_rect()
             self.Normal.blit(RText, (self.Width / 2 - txt_rect[2] / 2, self.Height / 2 - txt_rect[3] / 2))
 
-            # HIGHLIGHTED BUTTON
+            # Highlight the button
             self.High = pygame.Surface((self.Width, self.Height), pygame.HWSURFACE|pygame.SRCALPHA)
             self.High.fill(bgr)
             self.High.blit(RText, (self.Width / 2 - txt_rect[2] / 2, self.Height / 2 - txt_rect[3] / 2))
 
-            # SAVE BUTTON
+            # save button to list
             Menu.Button.All.append(self)
 
-
         def Render(self, to, pos = (0, 0)):
+            # Rendering the buttons to the screen
             if MouseOver((self.Left + pos[0], self.Top + pos[1], self.Width, self.Height)):
+                # Highlights if the mouse if over the button
                 to.blit(self.High, (self.Left + pos[0], self.Top + pos[1]))
                 self.Rolling = True
             else:
                 to.blit(self.Normal, (self.Left + pos[0], self.Top + pos[1]))
+                # Otherwise displays normally
                 self.Rolling = False
 
-
-
     class Text:
-
+        # Class for the text and list for all the text
         All = []
 
         def __init__(self, text, font = Font.Default, color = Color.Lime, bg = None):
+            # Sets all the atributes of the text, including position
             self.Text = text
             self.LastText = text
             self.Font = font
@@ -111,26 +109,25 @@ class Menu:
                 self.Width = self.Bitmap.get_width()
                 self.Height = self.Bitmap.get_height()
 
-
-
+            # Blits the text onto the screen
             to.blit(self.Bitmap, (self.Left + pos[0], self.Top + pos[1]))
 
-
-
     class Image:
-
+        # Images for this class
         def __init__(self, bitmap, pos = (0, 0)):
             self.Bitmap = bitmap
+            # Position and size attributes
             self.Left = pos[0]
             self.Top = pos[1]
             self.Height = bitmap.get_height()
             self.Width = bitmap.get_width()
 
         def Render(self, to, pos = (0, 0)):
+            # Renders the image onto the window
             to.blit(self.Bitmap, (self.Left + pos[0], self.Top + pos[1]))
 
-
-
+# Added framework
+# Same but for the instruction screen
 class Inst_screen:
 
     class Button:
@@ -229,7 +226,7 @@ class Inst_screen:
             to.blit(self.Bitmap, (self.Left + pos[0], self.Top + pos[1]))
 
 
-
+# Same but for the game over screen
 class Gameover:
 
     class Button:

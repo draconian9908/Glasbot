@@ -1,47 +1,40 @@
 import pygame
 import glob
 
-class Grass(pygame.sprite.Sprite):
-    def __init__(self, x=-1000, y=-1000):
+# Creates the classes for items in the inventory
+# Used only for inventory display purposes
+
+class Item(pygame.sprite.Sprite):
+    # Creates a broad item class
+    def __init__(self, x, y, image, points, amount, damage):
         pygame.sprite.Sprite.__init__(self)
-        super().__init__()
-        self.image = (pygame.image.load('Graphics/grass.png'))
-        self.points = 1
-        self.amount = 0
+        # Gets the image of the item
+        self.image = (pygame.image.load(image))
         self.rect = self.image.get_rect()
-        self.rect.y = y
+        # Gets the position for the item
         self.rect.x = x
+        self.rect.y = y
+        # Value of planting the item - n/a for the hoe
+        self.points = points
+        # Amount of seeds you have - only 1 hoe
+        self.amount = amount
+        # Amount of damage dealt - only for the hoe
+        self.damage = damage
+
+# Initialized all of the item classes
+class Grass(Item):
+    def __init__(self, x=-1000, y=-1000, image = 'Graphics/grass.png', points = 1, amount=0, damage=0):
+        super().__init__(x, y, image, points, amount,damage)
 
 
-class Flowers(pygame.sprite.Sprite):
-    def __init__(self, x=-1000, y=-1000):
-        pygame.sprite.Sprite.__init__(self)
-        super().__init__()
-        self.image = (pygame.image.load('Graphics/flowers.png'))
-        self.points = 2
-        self.amount = 0
-        self.rect = self.image.get_rect()
-        self.rect.y = y
-        self.rect.x = x
+class Flowers(Item):
+    def __init__(self, x=-1000, y=-1000, image = 'Graphics/flowers.png', points =2, amount=0,damage=0):
+        super().__init__(x,y,image,points,amount,damage)
 
-class Tree(pygame.sprite.Sprite):
-    def __init__(self, x=-1000, y=-1000):
-        pygame.sprite.Sprite.__init__(self)
-        super().__init__()
-        self.image = (pygame.image.load('Graphics/tree.png'))
-        self.points = 4
-        self.amount = 0
-        self.rect = self.image.get_rect()
-        self.rect.y = y
-        self.rect.x = x
+class Tree(Item):
+    def __init__(self, x=-1000, y=-1000, image='Graphics/tree.png', points=4, amount=0,damage=0):
+        super().__init__(x,y,image,points,amount,damage)
 
-class Hoe(pygame.sprite.Sprite):
-    def __init__(self, x=-1000, y=-1000):
-        pygame.sprite.Sprite.__init__(self)
-        super().__init__()
-        self.damage = 1
-        self.image = (pygame.image.load("Graphics/hoe.png"))
-        self.rect = self.image.get_rect()
-        self.rect.y = y
-        self.rect.x = x
-        self.amount = 1
+class Hoe(Item):
+    def __init__(self, x=-1000, y=-1000, image='Graphics/hoe.png', points=0, amount =1, damage=1):
+        super().__init__(x,y,image,points,amount,damage)
