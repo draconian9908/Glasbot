@@ -9,7 +9,7 @@ from meloonatic_gui import *
 from UltraColor import *
 from collectable import *
 
-
+current_map = 'maps/demo_map109'
 pygame.init()
 
 # intializes fonts for the game
@@ -30,7 +30,7 @@ logo_img.blit(logo_img_temp, (0, 0))
 del logo_img_temp
 
 # loads the map
-terrain = Map_engine.load_map("maps/demo_map105")
+terrain = Map_engine.load_map(current_map)
 
 # Dialog background
 dialog_bkgr = pygame.image.load('Graphics/Text_Box.png')
@@ -42,7 +42,7 @@ del dialog_bkgr
 # Reads the map given and makes the data into lists so we can read it
 # same as code in the map engine
 global tile_data
-with open('maps/demo_map105', "r") as mapfile:
+with open(current_map, "r") as mapfile:
     map_data = mapfile.read()
 
 map_data = map_data.split('-')

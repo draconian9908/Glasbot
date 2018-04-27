@@ -14,7 +14,7 @@ class Tiles:
     blockedNPC = []
 
     # The types of tiles in the map which cannot be walked on
-    blocked_types = ["3", '9','30','31','32','33','34','35','36','37','38']
+    blocked_types = ["3", '9','30','31','32','33','34','35','36','37','38', '50']
 
     def blocked_at(pos):
         # Checks if a tile is a blocked type for the player
@@ -93,6 +93,8 @@ class Tiles:
     woodtop = load_texture('Graphics/woodtop.png', size)
     woodtopleft = load_texture('Graphics/woodtopleft.png', size)
     woodtopright = load_texture('Graphics/woodtopright.png', size)
+    #boulder Tile
+    boulder = load_texture('Graphics/rock.png', size)
 
 
     # dictionary of all the different textures with keys
@@ -105,4 +107,4 @@ class Tiles:
                     '30':waterbarrel, '31':waterbottom, '32':waterbottomleft, '33':waterbottomright, '34':waterleft,
                     '35':wateroil, '36':waterright, '37':watertop, '38':watertopleft, '39':watertopright,
                     '40':woodbottom, '41':woodbottomleft, '42':woodbottomright, '43':woodleft, '44':woodright, '45':woodtop,
-                    '46':woodtopleft, '47':woodtopright}
+                    '46':woodtopleft, '47':woodtopright, '50':boulder}
