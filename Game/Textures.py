@@ -14,7 +14,7 @@ class Tiles:
     blockedNPC = []
 
     # The types of tiles in the map which cannot be walked on
-    blocked_types = ["3", '9','30','31','32','33','34','35','36','37','38', '50']
+    blocked_types = ["3", '9','30','31','32','33','34','35','36','37','38','39', '50']
 
     def blocked_at(pos):
         # Checks if a tile is a blocked type for the player

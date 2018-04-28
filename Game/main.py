@@ -9,7 +9,7 @@ from meloonatic_gui import *
 from UltraColor import *
 from collectable import *
 
-current_map = 'maps/demo_map109'
+current_map = 'maps/map1'
 pygame.init()
 
 # intializes fonts for the game
