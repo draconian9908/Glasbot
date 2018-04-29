@@ -132,28 +132,28 @@ tile1 = [0,0,'5']
 # makes enemies
 test_enemy = Enemy1(name = 'enemy', pos = (300, 500), target = player)
 #enemy_group.add(test_enemy)
-'''
+
 #arena enemies
-enemy1 = Enemy1(name = 'enemy', pos = (13 * Tiles.size, 78 * Tiles.size), target = player)
-enemy2 = Enemy1(name = 'enemy', pos = (18 * Tiles.size, 75 * Tiles.size), target = player)
-enemy3 = Enemy1(name = 'enemy', pos = (12 * Tiles.size, 69 * Tiles.size), target = player)
-enemy4 = Enemy1(name = 'enemy', pos = (8 * Tiles.size, 74 * Tiles.size), target = player)
-enemy5 = Enemy1(name = 'enemy', pos = (16 * Tiles.size, 68 * Tiles.size), target = player)
+enemy1 = Enemy1(name = 'enemy1', pos = (13 * Tiles.size, 78 * Tiles.size), target = player)
+enemy2 = Enemy1(name = 'enemy2', pos = (18 * Tiles.size, 75 * Tiles.size), target = player)
+enemy3 = Enemy1(name = 'enemy3', pos = (12 * Tiles.size, 69 * Tiles.size), target = player)
+enemy4 = Enemy1(name = 'enemy4', pos = (8 * Tiles.size, 74 * Tiles.size), target = player)
+enemy5 = Enemy1(name = 'enemy5', pos = (16 * Tiles.size, 68 * Tiles.size), target = player)
     #random enemies
-enemy6 = Enemy1(name = 'enemy', pos = (34 * Tiles.size, 58 * Tiles.size), target = player)
+enemy6 = Enemy1(name = 'enemy6', pos = (34 * Tiles.size, 58 * Tiles.size), target = player)
     #maze enemies
-enemy7 = Enemy1(name = 'enemy', pos = (63 * Tiles.size, 22 * Tiles.size), target = player)
-enemy8 = Enemy1(name = 'enemy', pos = (73 * Tiles.size, 12 * Tiles.size), target = player)
-enemy9 = Enemy1(name = 'enemy', pos = (61 * Tiles.size, 4 * Tiles.size), target = player)
-enemy10 = Enemy1(name = 'enemy', pos = (77 * Tiles.size, 12 * Tiles.size), target = player)
-enemy11 = Enemy1(name = 'enemy', pos = (90 * Tiles.size, 12 * Tiles.size), target = player)
-enemy12 = Enemy1(name = 'enemy', pos = (127 * Tiles.size, 19 * Tiles.size), target = player)
-enemy13 = Enemy1(name = 'enemy', pos = (117 * Tiles.size,19  * Tiles.size), target = player)
-enemy14 = Enemy1(name = 'enemy', pos = (118 * Tiles.size,11  * Tiles.size), target = player)
+enemy7 = Enemy1(name = 'enemy7', pos = (63 * Tiles.size, 22 * Tiles.size), target = player)
+enemy8 = Enemy1(name = 'enemy7', pos = (73 * Tiles.size, 12 * Tiles.size), target = player)
+enemy9 = Enemy1(name = 'enemy9', pos = (61 * Tiles.size, 4 * Tiles.size), target = player)
+enemy10 = Enemy1(name = 'enemy10', pos = (77 * Tiles.size, 12 * Tiles.size), target = player)
+enemy11 = Enemy1(name = 'enemy11', pos = (90 * Tiles.size, 12 * Tiles.size), target = player)
+enemy12 = Enemy1(name = 'enemy12', pos = (127 * Tiles.size, 19 * Tiles.size), target = player)
+enemy13 = Enemy1(name = 'enemy13', pos = (117 * Tiles.size,19  * Tiles.size), target = player)
+enemy14 = Enemy1(name = 'enemy14', pos = (118 * Tiles.size,11  * Tiles.size), target = player)
 #enemy15 = Enemy2(name = 'enemy', pos = (145 * Tiles.size,5 * Tiles.size), target = player)
 #enemy16 = Enemy2(name = 'enemy', pos = (148 * Tiles.size,14  * Tiles.size), target = player)
 #enemy17 = Enemy2(name = 'enemy', pos = (138 * Tiles.size,14  * Tiles.size), target = player)
-'''
+
 #INITIALIZE SOUNDS
 btnSound = pygame.mixer.Sound('Sounds/btnClick.wav')
 enemy_hit_sound = pygame.mixer.Sound('Sounds/enemy_hit.wav')
@@ -345,8 +345,10 @@ while isRunning:
                     # Checks to see if the NPC is hit
                     #print(NPC.enemy_npcs)
                     for npc in enemy_group:
-                        if player_x >= npc_x - 4 and player_x <= npc_x + 4 and player_y >= npc_y -4 and player_y <= npc_y + 4:
+                        print(npc.name, (npc.x/Tiles.size, npc.y/Tiles.size))
+                        if player_x >= npc.x/Tiles.size - 4 and player_x <= npc.x/Tiles.size + 4 and player_y >= npc.y/Tiles.size -4 and player_y <= npc.y/Tiles.size + 4:
                             # Checks to see if player is close enough
+                            print(npc.name, hit)
                             if round(player.y) > round(npc.y / Tiles.size):
                                 # sees where the player is relative to the enemy
                                 if player.facing == 'hoenorth':
@@ -357,19 +359,19 @@ while isRunning:
                                     # says it has been hit, takes away the damage
 
                             elif round(player.y) < round(npc.y / Tiles.size):
-                                #if player.facing == 'hoesouth':
-                                #    enemy_hit_sound.play()
-                                #    npc.health -= hoe.damage
+                                if player.facing == 'hoesouth':
+                                    enemy_hit_sound.play()
+                                    npc.health -= hoe.damage
                                 hit = True
                             elif round(player.x) > round(npc.x / Tiles.size):
-                                #if player.facing == 'hoeeast':
-                                #    enemy_hit_sound.play()
-                                #    npc.health -= hoe.damage
+                                if player.facing == 'hoeeast':
+                                    enemy_hit_sound.play()
+                                    npc.health -= hoe.damage
                                 hit = True
                             elif round(player.x) < round(npc.x / Tiles.size):
-                                #if player.facing == 'hoewest':
-                                #    enemy_hit_sound.play()
-                                #    npc.health -= hoe.damage
+                                if player.facing == 'hoewest':
+                                    enemy_hit_sound.play()
+                                    npc.health -= hoe.damage
                                 hit = True
 
                             if hit == True:

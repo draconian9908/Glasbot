@@ -131,6 +131,8 @@ class Enemy1(NPC):
         enemy_group.add(self)
         NPC.enemy_npcs.append(self)
 
+
+
 def get_faces(sprite):
     # decides which image is rendered based on direction
     faces = {}
