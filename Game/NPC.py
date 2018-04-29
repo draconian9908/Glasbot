@@ -14,16 +14,29 @@ def move_enemy(npc, player):
     dist = math.sqrt((player.x - npc.x/Tiles.size)**2 + (player.y - npc.y/Tiles.size)**2)
     #print(dist)
     if dist <= 10:
-        if round(player.y) > round(npc.y / Tiles.size):
-            # Sees where the player is relative to the NPC
-            npc.facing = 'npc_south'
-            # Makes the npc face the player
-        elif round(player.y) < round(npc.y / Tiles.size):
-            npc.facing = 'npc_north'
-        elif round(player.x) > round(npc.x / Tiles.size):
-            npc.facing = 'npc_east'
-        elif round(player.x) < round(npc.x / Tiles.size):
-            npc.facing = 'npc_west'
+        if npc.name == 'tall':
+
+            if round(player.y) > round(npc.y / Tiles.size):
+                # Sees where the player is relative to the NPC
+                npc.facing = 'npc2_south'
+                # Makes the npc face the player
+            elif round(player.y) < round(npc.y / Tiles.size):
+                npc.facing = 'npc2_north'
+            elif round(player.x) > round(npc.x / Tiles.size):
+                npc.facing = 'npc2_east'
+            elif round(player.x) < round(npc.x / Tiles.size):
+                npc.facing = 'npc2_west'
+        else:
+            if round(player.y) > round(npc.y / Tiles.size):
+                # Sees where the player is relative to the NPC
+                npc.facing = 'npc_south'
+                # Makes the npc face the player
+            elif round(player.y) < round(npc.y / Tiles.size):
+                npc.facing = 'npc_north'
+            elif round(player.x) > round(npc.x / Tiles.size):
+                npc.facing = 'npc_east'
+            elif round(player.x) < round(npc.x / Tiles.size):
+                npc.facing = 'npc_west'
         # Saying that the NPC is moving
         npc.walking = True
     else:
@@ -48,6 +61,7 @@ class NPC(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         super().__init__()
         self.name = name
+        self.move_speed = 75
         # Sets the position of the NPC for the start
         self.x = pos[0]
         self.y = pos[1]
@@ -83,23 +97,40 @@ class NPC(pygame.sprite.Sprite):
         y = self.y/Tiles.size
         if self.walking:
         # if it is supposed to move...
-            move_speed = 75 * Globals.deltatime
+            move_speed = self.move_speed * Globals.deltatime
             # Speed of the NPC
-            if self.facing == 'npc_south':
-            # Checks to see which direction facing
-                if not Tiles.blocked_at_NPC((round(x),math.floor(y)+1)):
-                    # if the tile in that direction is not blocked to the NPC
-                    self.y += move_speed
-                    # move the speed of the NPC in that direction
-            elif self.facing == 'npc_north':
-                if not Tiles.blocked_at_NPC((round(x),math.ceil(y)-1)):
-                    self.y -= move_speed
-            elif self.facing == 'npc_west':
-                if not Tiles.blocked_at_NPC((math.floor(x)-1,round(y))):
-                    self.x -= move_speed
-            elif self.facing == 'npc_east':
-                if not Tiles.blocked_at_NPC((math.floor(x)+1,round(y))):
-                    self.x += move_speed
+            if self.name == 'tall':
+                if self.facing == 'npc2_south':
+                # Checks to see which direction facing
+                    if not Tiles.blocked_at_NPC((round(x),math.floor(y)+1)):
+                        # if the tile in that direction is not blocked to the NPC
+                        self.y += move_speed
+                        # move the speed of the NPC in that direction
+                elif self.facing == 'npc2_north':
+                    if not Tiles.blocked_at_NPC((round(x),math.ceil(y)-1)):
+                        self.y -= move_speed
+                elif self.facing == 'npc2_west':
+                    if not Tiles.blocked_at_NPC((math.floor(x)-1,round(y))):
+                        self.x -= move_speed
+                elif self.facing == 'npc2_east':
+                    if not Tiles.blocked_at_NPC((math.floor(x)+1,round(y))):
+                        self.x += move_speed
+            else:
+                if self.facing == 'npc_south':
+                # Checks to see which direction facing
+                    if not Tiles.blocked_at_NPC((round(x),math.floor(y)+1)):
+                        # if the tile in that direction is not blocked to the NPC
+                        self.y += move_speed
+                        # move the speed of the NPC in that direction
+                elif self.facing == 'npc_north':
+                    if not Tiles.blocked_at_NPC((round(x),math.ceil(y)-1)):
+                        self.y -= move_speed
+                elif self.facing == 'npc_west':
+                    if not Tiles.blocked_at_NPC((math.floor(x)-1,round(y))):
+                        self.x -= move_speed
+                elif self.facing == 'npc_east':
+                    if not Tiles.blocked_at_NPC((math.floor(x)+1,round(y))):
+                        self.x += move_speed
             # Gets the current location of the NPC
             location = [round(self.x / Tiles.size), round(self.y / Tiles.size)]
             if self.last_location in Tiles.blocked:
@@ -112,6 +143,7 @@ class NPC(pygame.sprite.Sprite):
                 self.last_location = location
         # Blits the NPC to the location with the direction it is facing
         surface.blit(self.faces[self.facing], (self.x + Globals.camera_x, self.y + Globals.camera_y))
+
 
 class TestNPC(NPC):
     # The NPC class that is not enemies
@@ -131,6 +163,16 @@ class Enemy1(NPC):
         enemy_group.add(self)
         NPC.enemy_npcs.append(self)
 
+class Enemy2(NPC):
+    def __init__(self, pos,  target, name = 'tall', dialog = None, hostile = True, health = 8):
+        super().__init__(name, pos, dialog, pygame.image.load("Graphics/cookie.png"), hostile, health, target)
+        self.facing = 'npc2_south'
+        self.move_speed = 100
+        #sets NPC movement to that defined bt the move_enemy function
+        self.timer.on_next = lambda: move_enemy(self, target)
+        #appends NPC to enemy list
+        enemy_group.add(self)
+        NPC.enemy_npcs.append(self)
 
 
 def get_faces(sprite):
@@ -140,7 +182,28 @@ def get_faces(sprite):
     size = sprite.get_size()
     tile_size = (int(size[0]), int(size[1]))
 
-    #for NPC
+    #for NPC2
+    npc2_south = pygame.image.load("Graphics/NPC/wingsfront.png")
+    south = pygame.Surface(tile_size, pygame.HWSURFACE|pygame.SRCALPHA)
+    south.blit(npc2_south, (0,0), (0,0,tile_size[0],tile_size[1]))
+    faces["npc2_south"] = south
+
+    npc2_north = pygame.image.load("Graphics/NPC/wingsback.png")
+    north = pygame.Surface(tile_size, pygame.HWSURFACE|pygame.SRCALPHA)
+    north.blit(npc2_north, (0,0), (0,0,tile_size[0],tile_size[1]))
+    faces["npc2_north"] = north
+
+    npc2_east = pygame.image.load("Graphics/NPC/wingsleft.png")
+    east = pygame.Surface(tile_size, pygame.HWSURFACE|pygame.SRCALPHA)
+    east.blit(npc2_east, (0,0), (0,0,tile_size[0],tile_size[1]))
+    faces["npc2_east"] = east
+
+    npc2_west = pygame.image.load("Graphics/NPC/wingsright.png")
+    west = pygame.Surface(tile_size, pygame.HWSURFACE|pygame.SRCALPHA)
+    west.blit(npc2_west, (0,0), (0,0,tile_size[0],tile_size[1]))
+    faces["npc2_west"] = west
+
+    #for NPC1
     npc_south = pygame.image.load("Graphics/NPC/eyefront.png")
     south = pygame.Surface(tile_size, pygame.HWSURFACE|pygame.SRCALPHA)
     south.blit(npc_south, (0,0), (0,0,tile_size[0],tile_size[1]))

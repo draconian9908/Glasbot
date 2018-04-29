@@ -80,3 +80,31 @@ bag_group.add(bag17)
 
 bag18 = Bag(2, grass_bag_pic, 149, 4, 'grass')
 bag_group.add(bag18)
+
+    #swamp items
+bag19 = Bag(4, grass_bag_pic, 70, 88, 'grass')
+bag_group.add(bag19)
+
+bag20 = Bag(5, grass_bag_pic, 75, 91, 'grass')
+bag_group.add(bag20)
+
+bag21 = Bag(4, grass_bag_pic, 80, 90, 'grass')
+bag_group.add(bag21)
+
+bag22 = Bag(3, flower_bag_pic, 77, 83, 'flowers')
+bag_group.add(bag22)
+
+bag23 = Bag(1, tree_bag_pic, 76, 85, 'tree')
+bag_group.add(bag23)
+
+bag24 = Bag(2, flower_bag_pic, 44, 93, 'flowers')
+bag_group.add(bag24)
+
+bag25 = Bag(4, grass_bag_pic, 91, 85, 'grass')
+bag_group.add(bag25)
+
+bag26 = Bag(1, tree_bag_pic, 71, 68, 'tree')
+bag_group.add(bag26)
+
+bag27 = Bag(4, grass_bag_pic, 50, 79, 'grass')
+bag_group.add(bag27)

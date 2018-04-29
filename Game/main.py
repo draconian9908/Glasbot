@@ -130,7 +130,7 @@ hoe = Hoe(432, 560)
 tile1 = [0,0,'5']
 
 # makes enemies
-test_enemy = Enemy1(name = 'enemy', pos = (300, 500), target = player)
+test_enemy = Enemy2(pos = (300, 500), target = player)
 #enemy_group.add(test_enemy)
 
 #arena enemies
@@ -150,9 +150,22 @@ enemy11 = Enemy1(name = 'enemy11', pos = (90 * Tiles.size, 12 * Tiles.size), tar
 enemy12 = Enemy1(name = 'enemy12', pos = (127 * Tiles.size, 19 * Tiles.size), target = player)
 enemy13 = Enemy1(name = 'enemy13', pos = (117 * Tiles.size,19  * Tiles.size), target = player)
 enemy14 = Enemy1(name = 'enemy14', pos = (118 * Tiles.size,11  * Tiles.size), target = player)
-#enemy15 = Enemy2(name = 'enemy', pos = (145 * Tiles.size,5 * Tiles.size), target = player)
-#enemy16 = Enemy2(name = 'enemy', pos = (148 * Tiles.size,14  * Tiles.size), target = player)
-#enemy17 = Enemy2(name = 'enemy', pos = (138 * Tiles.size,14  * Tiles.size), target = player)
+enemy15 = Enemy2(pos = (145 * Tiles.size,5 * Tiles.size), target = player)
+enemy16 = Enemy2(pos = (148 * Tiles.size,14  * Tiles.size), target = player)
+enemy17 = Enemy2(pos = (138 * Tiles.size,14  * Tiles.size), target = player)
+    #swamp enemies
+enemy15 = Enemy1(name = 'enemy15', pos = (58 * Tiles.size,61  * Tiles.size), target = player)
+enemy16 = Enemy1(name = 'enemy16', pos = (58 * Tiles.size,68  * Tiles.size), target = player)
+enemy17 = Enemy1(name = 'enemy17', pos = (40 * Tiles.size,72  * Tiles.size), target = player)
+enemy18 = Enemy1(name = 'enemy18', pos = (51 * Tiles.size,79  * Tiles.size), target = player)
+enemy19 = Enemy1(name = 'enemy19', pos = (61 * Tiles.size,72  * Tiles.size), target = player)
+enemy20 = Enemy1(name = 'enemy20', pos = (78 * Tiles.size,74  * Tiles.size), target = player)
+enemy21 = Enemy1(name = 'enemy21', pos = (92 * Tiles.size,87  * Tiles.size), target = player)
+enemy22 = Enemy1(name = 'enemy22', pos = (87 * Tiles.size,97  * Tiles.size), target = player)
+enemy23 = Enemy1(name = 'enemy23', pos = (52 * Tiles.size,83  * Tiles.size), target = player)
+enemy24 = Enemy2(pos = (78 * Tiles.size,87  * Tiles.size), target = player)
+enemy25 = Enemy2(pos = (70 * Tiles.size,91  * Tiles.size), target = player)
+enemy26 = Enemy1(name = 'enemy26', pos = (66 * Tiles.size,88  * Tiles.size), target = player)
 
 #INITIALIZE SOUNDS
 btnSound = pygame.mixer.Sound('Sounds/btnClick.wav')
@@ -345,10 +358,8 @@ while isRunning:
                     # Checks to see if the NPC is hit
                     #print(NPC.enemy_npcs)
                     for npc in enemy_group:
-                        print(npc.name, (npc.x/Tiles.size, npc.y/Tiles.size))
-                        if player_x >= npc.x/Tiles.size - 4 and player_x <= npc.x/Tiles.size + 4 and player_y >= npc.y/Tiles.size -4 and player_y <= npc.y/Tiles.size + 4:
+                        if player_x >= npc.x/Tiles.size - 2 and player_x <= npc.x/Tiles.size + 2 and player_y >= npc.y/Tiles.size -2 and player_y <= npc.y/Tiles.size + 2:
                             # Checks to see if player is close enough
-                            print(npc.name, hit)
                             if round(player.y) > round(npc.y / Tiles.size):
                                 # sees where the player is relative to the enemy
                                 if player.facing == 'hoenorth':
@@ -378,14 +389,14 @@ while isRunning:
                                 # checks to see if the npc has been hit
                                 enemy_hit_sound.play()
                                 npc.health -= hoe.damage
-                                if npc.facing == 'npc_south':
+                                if player.facing == 'hoesouth':
                                     # moves the npc back based on the direction it is facing
                                     npc.y -= 40
-                                elif npc.facing == 'npc_north':
+                                elif player.facing == 'hoenorth':
                                     npc.y += 40
-                                elif npc.facing == 'npc_east':
+                                elif player.facing == 'hoeeast':
                                     npc.x -= 40
-                                elif npc.facing == 'npc_west':
+                                elif player.facing == 'hoewest':
                                     npc.x += 40
                         else:
                             pass
