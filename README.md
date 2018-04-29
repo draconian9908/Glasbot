@@ -1,6 +1,6 @@
 # Glasbot
 
-## A top down one player rpg game
+## A top down single player rpg game
 python 3.6.3
 Packages:
     pygame 1.9.3, sys, time, random, math
