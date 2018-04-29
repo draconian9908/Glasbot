@@ -46,7 +46,7 @@ with open(current_map, "r") as mapfile:
     map_data = mapfile.read()
 
 map_data = map_data.split('-')
-print(map_data)
+
 
 map_size = map_data[len(map_data)-1]
 map_data.remove(map_size)
@@ -63,9 +63,7 @@ for tile in range(len(map_data)):
 for tile in tiles:
     tile[0] = tile[0].split(",")
     pos = tile[0]
-    print(tile)
     for p in pos:
-        print(p)
         pos[pos.index(p)] = int(p)
 
     tiles[tiles.index(tile)] = [pos[0] * Tiles.size, pos[1] * Tiles.size, tile[1]]
@@ -131,9 +129,31 @@ hoe = Hoe(432, 560)
 # Makes a default tile1
 tile1 = [0,0,'5']
 
-# makes an enemy
-enemy_test = Enemy1(name = 'enemy', pos = (500, 100), target = player)
-
+# makes enemies
+test_enemy = Enemy1(name = 'enemy', pos = (300, 500), target = player)
+#enemy_group.add(test_enemy)
+'''
+#arena enemies
+enemy1 = Enemy1(name = 'enemy', pos = (13 * Tiles.size, 78 * Tiles.size), target = player)
+enemy2 = Enemy1(name = 'enemy', pos = (18 * Tiles.size, 75 * Tiles.size), target = player)
+enemy3 = Enemy1(name = 'enemy', pos = (12 * Tiles.size, 69 * Tiles.size), target = player)
+enemy4 = Enemy1(name = 'enemy', pos = (8 * Tiles.size, 74 * Tiles.size), target = player)
+enemy5 = Enemy1(name = 'enemy', pos = (16 * Tiles.size, 68 * Tiles.size), target = player)
+    #random enemies
+enemy6 = Enemy1(name = 'enemy', pos = (34 * Tiles.size, 58 * Tiles.size), target = player)
+    #maze enemies
+enemy7 = Enemy1(name = 'enemy', pos = (63 * Tiles.size, 22 * Tiles.size), target = player)
+enemy8 = Enemy1(name = 'enemy', pos = (73 * Tiles.size, 12 * Tiles.size), target = player)
+enemy9 = Enemy1(name = 'enemy', pos = (61 * Tiles.size, 4 * Tiles.size), target = player)
+enemy10 = Enemy1(name = 'enemy', pos = (77 * Tiles.size, 12 * Tiles.size), target = player)
+enemy11 = Enemy1(name = 'enemy', pos = (90 * Tiles.size, 12 * Tiles.size), target = player)
+enemy12 = Enemy1(name = 'enemy', pos = (127 * Tiles.size, 19 * Tiles.size), target = player)
+enemy13 = Enemy1(name = 'enemy', pos = (117 * Tiles.size,19  * Tiles.size), target = player)
+enemy14 = Enemy1(name = 'enemy', pos = (118 * Tiles.size,11  * Tiles.size), target = player)
+#enemy15 = Enemy2(name = 'enemy', pos = (145 * Tiles.size,5 * Tiles.size), target = player)
+#enemy16 = Enemy2(name = 'enemy', pos = (148 * Tiles.size,14  * Tiles.size), target = player)
+#enemy17 = Enemy2(name = 'enemy', pos = (138 * Tiles.size,14  * Tiles.size), target = player)
+'''
 #INITIALIZE SOUNDS
 btnSound = pygame.mixer.Sound('Sounds/btnClick.wav')
 enemy_hit_sound = pygame.mixer.Sound('Sounds/enemy_hit.wav')
@@ -304,6 +324,7 @@ while isRunning:
                 item = 'hoe'
             # plant
             elif event.key == pygame.K_SPACE:
+                print(player.x, player.y)
                 # Placement directions
                 x_south_north = round((window_width/2 - player_w/2 - glob.Globals.camera_x)/Tiles.size)*Tiles.size
                 y_south = round((window_height/2 - player_h/2 - glob.Globals.camera_y +32)/Tiles.size)*Tiles.size
@@ -322,7 +343,8 @@ while isRunning:
                 if item == 'hoe':
                     hit = False
                     # Checks to see if the NPC is hit
-                    for npc in NPC.enemy_npcs:
+                    #print(NPC.enemy_npcs)
+                    for npc in enemy_group:
                         if player_x >= npc_x - 4 and player_x <= npc_x + 4 and player_y >= npc_y -4 and player_y <= npc_y + 4:
                             # Checks to see if player is close enough
                             if round(player.y) > round(npc.y / Tiles.size):
@@ -333,23 +355,27 @@ while isRunning:
                                     npc.health -= hoe.damage
                                     hit = True
                                     # says it has been hit, takes away the damage
+
                             elif round(player.y) < round(npc.y / Tiles.size):
-                                if player.facing == 'hoesouth':
-                                    enemy_hit_sound.play()
-                                    npc.health -= hoe.damage
-                                    hit = True
+                                #if player.facing == 'hoesouth':
+                                #    enemy_hit_sound.play()
+                                #    npc.health -= hoe.damage
+                                hit = True
                             elif round(player.x) > round(npc.x / Tiles.size):
-                                if player.facing == 'hoeeast':
-                                    enemy_hit_sound.play()
-                                    npc.health -= hoe.damage
-                                    hit = True
+                                #if player.facing == 'hoeeast':
+                                #    enemy_hit_sound.play()
+                                #    npc.health -= hoe.damage
+                                hit = True
                             elif round(player.x) < round(npc.x / Tiles.size):
-                                if player.facing == 'hoewest':
-                                    enemy_hit_sound.play()
-                                    npc.health -= hoe.damage
-                                    hit = True
+                                #if player.facing == 'hoewest':
+                                #    enemy_hit_sound.play()
+                                #    npc.health -= hoe.damage
+                                hit = True
+
                             if hit == True:
                                 # checks to see if the npc has been hit
+                                enemy_hit_sound.play()
+                                npc.health -= hoe.damage
                                 if npc.facing == 'npc_south':
                                     # moves the npc back based on the direction it is facing
                                     npc.y -= 40
@@ -359,6 +385,8 @@ while isRunning:
                                     npc.x -= 40
                                 elif npc.facing == 'npc_west':
                                     npc.x += 40
+                        else:
+                            pass
 
                 if item == 'grass':
                     if grass.amount == 0:
@@ -539,13 +567,13 @@ while isRunning:
                 # hurts the player while in contact
                 if npc.facing == 'npc_south':
                     # Moves the screen based on the direction of the enemy
-                    glob.Globals.camera_y -= 2
+                    glob.Globals.camera_y -= 10
                 elif npc.facing == 'npc_north':
-                    glob.Globals.camera_y += 2
+                    glob.Globals.camera_y += 10
                 elif npc.facing == 'npc_east':
-                    glob.Globals.camera_x -= 2
+                    glob.Globals.camera_x -= 10
                 elif npc.facing == 'npc_west':
-                    glob.Globals.camera_x += 2
+                    glob.Globals.camera_x += 10
             npc.render(window)
             if npc.health <= 0:
                 # if the npc dies - exile him

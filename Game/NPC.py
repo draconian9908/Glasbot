@@ -7,11 +7,13 @@ import math
 
 pygame.init()
 
+
 # Function in order to move the enemy and track the player
 def move_enemy(npc, player):
     # Checks to see that the player is close to the enemy - variable distance
     dist = math.sqrt((player.x - npc.x/Tiles.size)**2 + (player.y - npc.y/Tiles.size)**2)
-    if dist <= 5 * 32:
+    #print(dist)
+    if dist <= 10:
         if round(player.y) > round(npc.y / Tiles.size):
             # Sees where the player is relative to the NPC
             npc.facing = 'npc_south'
@@ -36,12 +38,15 @@ class Dialog:
         self.page = 0
         self.text = text #[('blah blah blah', 'blahblah blah'), ('blah blah')]
 
-
-class NPC:
+enemy_group = pygame.sprite.Group()
+class NPC(pygame.sprite.Sprite):
     # NPC class for enemies mostly - lists for NPCs and then another for only enemies
     all_npc = []
     enemy_npcs = []
+
     def __init__(self, name, pos, dialog, sprite, hostile, health, target):
+        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
         self.name = name
         # Sets the position of the NPC for the start
         self.x = pos[0]
@@ -68,6 +73,7 @@ class NPC:
         #shows the direction of the NPC
         self.facing = 'npc_south'
         self.faces = get_faces(sprite)
+
 
     def render(self, surface):
         # Updates the timer on the NPC
@@ -118,9 +124,11 @@ class TestNPC(NPC):
 class Enemy1(NPC):
     def __init__(self, name, pos,  target, dialog = None, hostile = True, health = 4):
         super().__init__(name, pos, dialog, pygame.image.load("Graphics/cookie.png"), hostile, health, target)
+
         #sets NPC movement to that defined bt the move_enemy function
         self.timer.on_next = lambda: move_enemy(self, target)
         #appends NPC to enemy list
+        enemy_group.add(self)
         NPC.enemy_npcs.append(self)
 
 def get_faces(sprite):
