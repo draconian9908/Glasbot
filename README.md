@@ -3,11 +3,7 @@
 ## A top down one player rpg game
 python 3.6.3
 Packages:
-    pygame 1.9.3
-    sys
-    time
-    random
-    math
+    pygame 1.9.3, sys, time, random, math
 
 ## Project Website
 
