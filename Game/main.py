@@ -18,7 +18,7 @@ fps_font = pygame.font.Font(None, 20)
 amount_font = pygame.font.Font(None, 20)
 
 # Makes the background behind the map
-sky = pygame.image.load("Graphics/sky.png")
+sky = pygame.image.load("Graphics/blk.png")
 Sky = pygame.Surface(sky.get_size(), pygame.HWSURFACE)
 Sky.blit(sky, (0,0))
 del sky
@@ -96,6 +96,7 @@ def create_window():
     pygame.display.set_caption(window_title)
     window = pygame.display.set_mode((window_width, window_height), pygame.HWSURFACE|pygame.DOUBLEBUF)
     #Actually makes the window with the title
+    pygame.display.set_mode((window_width,window_height),pygame.FULLSCREEN)
     clock = pygame.time.Clock()
 
 cSec = 0
@@ -131,6 +132,8 @@ tile1 = [0,0,'5']
 
 # makes enemies
 test_enemy = Enemy2(pos = (300, 500), target = player)
+#test_enemy2 = Enemy1(name = 'enemy1', pos = (350, 500), target = player)
+
 #enemy_group.add(test_enemy)
 
 #arena enemies
@@ -364,40 +367,43 @@ while isRunning:
                                 # sees where the player is relative to the enemy
                                 if player.facing == 'hoenorth':
                                     # checks to make sure they are facing the enemy
-                                    enemy_hit_sound.play()
-                                    npc.health -= hoe.damage
-                                    hit = True
+                                        hit = True
                                     # says it has been hit, takes away the damage
 
                             elif round(player.y) < round(npc.y / Tiles.size):
                                 if player.facing == 'hoesouth':
-                                    enemy_hit_sound.play()
-                                    npc.health -= hoe.damage
-                                hit = True
+                                    hit = True
                             elif round(player.x) > round(npc.x / Tiles.size):
                                 if player.facing == 'hoeeast':
-                                    enemy_hit_sound.play()
-                                    npc.health -= hoe.damage
-                                hit = True
+                                    hit = True
                             elif round(player.x) < round(npc.x / Tiles.size):
                                 if player.facing == 'hoewest':
-                                    enemy_hit_sound.play()
-                                    npc.health -= hoe.damage
-                                hit = True
+                                    hit = True
 
                             if hit == True:
                                 # checks to see if the npc has been hit
                                 enemy_hit_sound.play()
                                 npc.health -= hoe.damage
-                                if player.facing == 'hoesouth':
-                                    # moves the npc back based on the direction it is facing
-                                    npc.y -= 40
-                                elif player.facing == 'hoenorth':
-                                    npc.y += 40
-                                elif player.facing == 'hoeeast':
-                                    npc.x -= 40
-                                elif player.facing == 'hoewest':
-                                    npc.x += 40
+                                if npc.name == 'tall':
+                                    if player.facing == 'hoesouth':
+                                        # moves the npc back based on the direction it is facing
+                                        npc.y += 80
+                                    elif player.facing == 'hoenorth':
+                                        npc.y -= 80
+                                    elif player.facing == 'hoeeast':
+                                        npc.x -= 80
+                                    elif player.facing == 'hoewest':
+                                        npc.x += 80
+                                else:
+                                    if player.facing == 'hoesouth':
+                                        # moves the npc back based on the direction it is facing
+                                        npc.y += 40
+                                    elif player.facing == 'hoenorth':
+                                        npc.y -= 40
+                                    elif player.facing == 'hoeeast':
+                                        npc.x -= 40
+                                    elif player.facing == 'hoewest':
+                                        npc.x += 40
                         else:
                             pass
 
@@ -578,15 +584,15 @@ while isRunning:
                 # if the npc reaches the player
                 player.health -= 1
                 # hurts the player while in contact
-                if npc.facing == 'npc_south':
+                if npc.facing == 'npc1_south' or npc.facing == 'npc2_south' :
                     # Moves the screen based on the direction of the enemy
-                    glob.Globals.camera_y -= 10
-                elif npc.facing == 'npc_north':
-                    glob.Globals.camera_y += 10
-                elif npc.facing == 'npc_east':
-                    glob.Globals.camera_x -= 10
-                elif npc.facing == 'npc_west':
-                    glob.Globals.camera_x += 10
+                    glob.Globals.camera_y -= 4
+                elif npc.facing == 'npc1_north' or npc.facing == 'npc2_north':
+                    glob.Globals.camera_y += 4
+                elif npc.facing == 'npc1_east' or npc.facing == 'npc2_east':
+                    glob.Globals.camera_x -= 4
+                elif npc.facing == 'npc1_west' or npc.facing == 'npc2_west':
+                    glob.Globals.camera_x += 4
             npc.render(window)
             if npc.health <= 0:
                 # if the npc dies - exile him

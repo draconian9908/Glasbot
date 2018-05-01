@@ -22,9 +22,9 @@ def move_enemy(npc, player):
                 # Makes the npc face the player
             elif round(player.y) < round(npc.y / Tiles.size):
                 npc.facing = 'npc2_north'
-            elif round(player.x) > round(npc.x / Tiles.size):
+            if round(player.x) > round(npc.x / Tiles.size):
                 npc.facing = 'npc2_east'
-            elif round(player.x) < round(npc.x / Tiles.size):
+            if round(player.x) < round(npc.x / Tiles.size):
                 npc.facing = 'npc2_west'
         else:
             if round(player.y) > round(npc.y / Tiles.size):
@@ -72,7 +72,7 @@ class NPC(pygame.sprite.Sprite):
         # Says if NPC is moving or not
         self.walking = False
         # Uses timers for the NPC and make movement at every step
-        self.timer = Timer(1)
+        self.timer = Timer(.25)
         self.timer.on_next = None
         self.timer.start()
 
@@ -156,7 +156,6 @@ class TestNPC(NPC):
 class Enemy1(NPC):
     def __init__(self, name, pos,  target, dialog = None, hostile = True, health = 4):
         super().__init__(name, pos, dialog, pygame.image.load("Graphics/cookie.png"), hostile, health, target)
-
         #sets NPC movement to that defined bt the move_enemy function
         self.timer.on_next = lambda: move_enemy(self, target)
         #appends NPC to enemy list
@@ -167,7 +166,7 @@ class Enemy2(NPC):
     def __init__(self, pos,  target, name = 'tall', dialog = None, hostile = True, health = 8):
         super().__init__(name, pos, dialog, pygame.image.load("Graphics/cookie.png"), hostile, health, target)
         self.facing = 'npc2_south'
-        self.move_speed = 100
+        self.move_speed = 90
         #sets NPC movement to that defined bt the move_enemy function
         self.timer.on_next = lambda: move_enemy(self, target)
         #appends NPC to enemy list
@@ -214,15 +213,15 @@ def get_faces(sprite):
     north.blit(npc_north, (0,0), (0,0,tile_size[0],tile_size[1]))
     faces["npc_north"] = north
 
-    npc_east = pygame.image.load("Graphics/NPC/eyeright.png")
+    npc_east = pygame.image.load("Graphics/NPC/eyeleft.png")
     east = pygame.Surface(tile_size, pygame.HWSURFACE|pygame.SRCALPHA)
     east.blit(npc_east, (0,0), (0,0,tile_size[0],tile_size[1]))
-    faces["npc_east"] = east
+    faces["npc_west"] = east
 
-    npc_west = pygame.image.load("Graphics/NPC/eyeleft.png")
+    npc_west = pygame.image.load("Graphics/NPC/eyeright.png")
     west = pygame.Surface(tile_size, pygame.HWSURFACE|pygame.SRCALPHA)
     west.blit(npc_west, (0,0), (0,0,tile_size[0],tile_size[1]))
-    faces["npc_west"] = west
+    faces["npc_east"] = west
 
     # FOR THE PLAYER
     #with nothing in hand
