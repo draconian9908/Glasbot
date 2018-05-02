@@ -24,7 +24,7 @@ Sky.blit(sky, (0,0))
 del sky
 
 # Makes the logo features to load in the background
-logo_img_temp = pygame.image.load('Graphics/back.jpg')
+logo_img_temp = pygame.image.load('Graphics/titlepage.png')
 logo_img = pygame.Surface(logo_img_temp.get_size(), pygame.HWSURFACE)
 logo_img.blit(logo_img_temp, (0, 0))
 del logo_img_temp
@@ -662,11 +662,11 @@ while isRunning:
     elif glob.Globals.scene == 'menu':
         window.fill(Color.Fog)
 
-        logo.Render(window, (0, -70))
+        logo.Render(window, (0, 0))
         logo.Left = window_width/2 - logo.Width/2
         #logo.Top = window_height/2 - logo.Height/2
 
-        menuTitle.Render(window)
+        # menuTitle.Render(window)
 
         for btn in Menu.Button.All:
             if btn.Tag[0] == "menu":
